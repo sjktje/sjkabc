@@ -4,7 +4,7 @@
 Module for parsing text files containing ABC music notation and putting it in
 a SQL database.
 """
-
+import collections
 import json
 
 header_keys = dict(
@@ -50,6 +50,7 @@ def parse_file(filename):
             if line[0:2] == 'X:' and line[3].isdigit():
                 in_header = True
                 pieces.append({})
+                pieces[-1] = collections.defaultdict(list)
                 piece = pieces[-1]
                 piece['index'] = line[3:].strip()
                 continue
@@ -57,17 +58,11 @@ def parse_file(filename):
             if in_header:
                 (key, value) = line.split(':')
                 if key in header_keys:
-                    if key == 'K':
-                        in_header = False
-                    elif header_keys[key] in piece:
-                        piece[header_keys[key]].append(value.strip())
-                    else:
-                        piece[header_keys[key]] = [value.strip()]
+                    piece[header_keys[key]].append(value.strip())
+                if key == 'K':
+                    in_header = False
             else:
-                if 'abc' in piece:
-                    piece['abc'].append(line)
-                else:
-                    piece['abc'] = [line]
+                piece['abc'].append(line)
 
     return pieces
 
