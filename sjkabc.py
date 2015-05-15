@@ -67,6 +67,26 @@ def parse_file(filename):
     return pieces
 
 
+def strip_ornaments(abc):
+    ret = []
+    in_gracenote = False
+    for c in abc:
+        if c == '{':
+            in_gracenote = True
+            continue
+        if c == '}':
+            in_gracenote = False
+            continue
+        if not in_gracenote and c != '~':
+            ret.append(c)
+    ret = ''.join(ret)
+    ret = ret.replace('!trill(!','')
+    ret = ret.replace('!trill)!','')
+    ret = ret.replace('!turn!','')
+    ret = ret.replace('!fermata!','')
+    return ret
+
+
 if __name__ == "__main__":
     pieces = parse_file('test.abc')
     print json.dumps(pieces, sort_keys=True, indent=4)
