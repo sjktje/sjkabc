@@ -68,7 +68,11 @@ def parse_file(filename):
 
 
 def strip_ornaments(abc):
-    ret = []
+    """
+    Remove gracenotes, tildes, trills, turns and fermatas from string.
+    """
+
+    tmp = []
     in_gracenote = False
     for c in abc:
         if c == '{':
@@ -78,8 +82,8 @@ def strip_ornaments(abc):
             in_gracenote = False
             continue
         if not in_gracenote and c != '~':
-            ret.append(c)
-    ret = ''.join(ret)
+            tmp.append(c)
+    ret = ''.join(tmp)
     ret = ret.replace('!trill(!','')
     ret = ret.replace('!trill)!','')
     ret = ret.replace('!turn!','')
@@ -89,4 +93,4 @@ def strip_ornaments(abc):
 
 if __name__ == "__main__":
     pieces = parse_file('test.abc')
-    print json.dumps(pieces, sort_keys=True, indent=4)
+    # print json.dumps(pieces, sort_keys=True, indent=4)
