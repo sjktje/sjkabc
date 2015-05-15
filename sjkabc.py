@@ -132,11 +132,14 @@ def strip_bar_dividers(abc):
     ABCD ABCDABCD abcd:|bcde BCDE
     """
     ret = []
-    for i, c in enumerate(abc):
-        prev = abc[i-1]
+    prev = None
+
+    for c in abc:
         if (c == '|' and prev != ':') or c == ']':
             continue
         ret.append(c)
+        prev = c
+
     return ''.join(ret)
 
 
@@ -146,12 +149,15 @@ def expand_notes(abc):
     """
 
     ret = []
-    for i, c in enumerate(abc):
-        prev = abc[i-1]
-        if c.isdigit() and (prev.isalpha() or prev == ',' or prev == '\''):
+    prev = None
+    for c in abc:
+        if c.isdigit() and (prev.isalpha() or prev in [',' '\'']):
             ret.append(prev * (int(c)-1))
         else:
             ret.append(c)
+
+        prev = c
+
     return ''.join(ret)
 
 
