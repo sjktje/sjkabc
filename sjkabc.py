@@ -3,41 +3,45 @@
 
 import json
 
-abc_header_table = """
-A:area
-B:book
-C:composer
-D:discography
-G:group
-H:history
-I:instruction
-K:key
-L:metre
-M:meter
-N:notes
-O:origin
-Q:tempo
-R:rhythm
-S:source
-T:title
-X:index
-Z:transcription
-"""
+def abc_header_keys():
+    header_table = """
+    A:area
+    B:book
+    C:composer
+    D:discography
+    G:group
+    H:history
+    I:instruction
+    K:key
+    L:metre
+    M:meter
+    N:notes
+    O:origin
+    Q:tempo
+    R:rhythm
+    S:source
+    T:title
+    X:index
+    Z:transcription
+    """
 
-abc_header_keys = {}
+    header_keys = {}
 
-for line in abc_header_table.split('\n'):
-    line = line.strip()
+    for line in header_table.split('\n'):
+        line = line.strip()
 
-    if line == '':
-        continue
+        if line == '':
+            continue
 
-    (key, name) = line.split(':')
+        (key, name) = line.split(':')
 
-    abc_header_keys[key] = name
+        header_keys[key] = name
 
+    return header_keys
 
 def parse_file(filename):
+    header_keys = abc_header_keys()
+
     in_header = False
     pieces = []
     with open(filename, 'r') as f:
@@ -56,8 +60,8 @@ def parse_file(filename):
 
             if in_header:
                 (key, value) = line.split(':')
-                if key in abc_header_keys:
-                    piece[abc_header_keys[key]] = value.strip()
+                if key in header_keys:
+                    piece[header_keys[key]] = value.strip()
                     if key == 'K':
                         in_header = False
             else:
@@ -67,6 +71,7 @@ def parse_file(filename):
                     piece['abc'] = [line]
 
     print json.dumps(pieces, sort_keys=True, indent=4)
+
 
 if __name__ == "__main__":
     parse_file('test.abc')
