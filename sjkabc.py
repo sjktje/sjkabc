@@ -107,6 +107,17 @@ def strip_accidentals(abc):
     return ''.join(ret)
 
 
+def strip_octave(abc):
+    """Remove octave specifiers from string."""
+    ret = []
+
+    for c in abc:
+        if c != ',' and c != '\'':
+            ret.append(c)
+
+    return ''.join(ret)
+
+
 if __name__ == "__main__":
     pieces = parse_file('test.abc')
     # print json.dumps(pieces, sort_keys=True, indent=4)
