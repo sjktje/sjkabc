@@ -96,6 +96,17 @@ def strip_whitespace(abc):
     return abc.replace(' ', '')
 
 
+def strip_accidentals(abc):
+    """Remove accidentals from string."""
+    ret = []
+
+    for c in abc:
+        if c != '=' and c != '^' and c != '_':
+            ret.append(c)
+
+    return ''.join(ret)
+
+
 if __name__ == "__main__":
     pieces = parse_file('test.abc')
     # print json.dumps(pieces, sort_keys=True, indent=4)
