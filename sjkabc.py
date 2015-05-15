@@ -7,66 +7,26 @@ a SQL database.
 
 import json
 
-def abc_header_keys():
-    """
-    Return a dict of key:name values for supported ABC header keys.
-
-    These are currently:
-
-    A:area
-    B:book
-    C:composer
-    D:discography
-    G:group
-    H:history
-    I:instruction
-    K:key
-    L:metre
-    M:meter
-    N:notes
-    O:origin
-    Q:tempo
-    R:rhythm
-    S:source
-    T:title
-    X:index
-    Z:transcription
-    """
-
-    header_table = """
-    A:area
-    B:book
-    C:composer
-    D:discography
-    G:group
-    H:history
-    I:instruction
-    K:key
-    L:metre
-    M:meter
-    N:notes
-    O:origin
-    Q:tempo
-    R:rhythm
-    S:source
-    T:title
-    X:index
-    Z:transcription
-    """
-
-    header_keys = {}
-
-    for line in header_table.split('\n'):
-        line = line.strip()
-
-        if line == '':
-            continue
-
-        (key, name) = line.split(':')
-
-        header_keys[key] = name
-
-    return header_keys
+header_keys = dict(
+    A='area',
+    B='book',
+    C='composer',
+    D='discography',
+    G='group',
+    H='history',
+    I='instruction',
+    K='key',
+    L='metre',
+    M='meter',
+    N='notes',
+    O='origin',
+    Q='tempo',
+    R='rhythm',
+    S='source',
+    T='title',
+    X='index',
+    Z='transcription'
+)
 
 
 def parse_file(filename):
@@ -76,7 +36,6 @@ def parse_file(filename):
     Return list of dictionaries of lists (jikes).
     """
 
-    header_keys = abc_header_keys()
     in_header = False
     pieces = []
 
