@@ -118,6 +118,28 @@ def strip_octave(abc):
     return ''.join(ret)
 
 
+def strip_bar_dividers(abc):
+    """
+    Strip bar dividers from string
+
+    This function can safely be run before expand_parts, as it won't remove
+    repeats, e.g.:
+
+    ABCD ABCD|ABCD abcd:|bcde BCDE|]
+
+    becomes
+
+    ABCD ABCDABCD abcd:|bcde BCDE
+    """
+    ret = []
+    for i, c in enumerate(abc):
+        prev = abc[i-1]
+        if (c == '|' and prev != ':') or c == ']':
+            continue
+        ret.append(c)
+    return ''.join(ret)
+
+
 if __name__ == "__main__":
     pieces = parse_file('test.abc')
     # print json.dumps(pieces, sort_keys=True, indent=4)
