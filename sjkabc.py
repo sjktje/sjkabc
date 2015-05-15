@@ -148,7 +148,7 @@ def expand_notes(abc):
     ret = []
     for i, c in enumerate(abc):
         prev = abc[i-1]
-        if c.isdigit() and (prev.isalpha or prev == ',' or prev == '\''):
+        if c.isdigit() and (prev.isalpha() or prev == ',' or prev == '\''):
             ret.append(prev * (int(c)-1))
         else:
             ret.append(c)
