@@ -140,6 +140,22 @@ def strip_bar_dividers(abc):
     return ''.join(ret)
 
 
+def expand_notes(abc):
+    """
+    Expand notes, so that E2 becomes EE et.c.
+    """
+
+    ret = []
+    for i, c in enumerate(abc):
+        prev = abc[i-1]
+        if c.isdigit() and (prev.isalpha or prev == ',' or prev == '\''):
+            ret.append(prev * (int(c)-1))
+        else:
+            ret.append(c)
+    return ''.join(ret)
+
+
 if __name__ == "__main__":
     pieces = parse_file('test.abc')
     # print json.dumps(pieces, sort_keys=True, indent=4)
+    print expand_notes("A3A B2CD|efg2 abc2")
