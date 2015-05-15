@@ -91,6 +91,11 @@ def strip_ornaments(abc):
     return ret
 
 
+def strip_whitespace(abc):
+    """Remove whitespace from string."""
+    return abc.replace(' ', '')
+
+
 if __name__ == "__main__":
     pieces = parse_file('test.abc')
     # print json.dumps(pieces, sort_keys=True, indent=4)
