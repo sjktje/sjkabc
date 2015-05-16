@@ -161,7 +161,99 @@ def expand_notes(abc):
     return ''.join(ret)
 
 
+
+def expand_parts(abc):
+    """
+    Expand repeats with support for (two) alternate endings.
+
+    In other words:
+
+        |:aaa|bbb|1ccc|ddd:|2eee|fff||
+
+    becomes:
+
+        aaa|bbb|ccc|ddd|aaa|bbb|eee|fff
+
+    An alternate ending may contain a maximum of two bars, as per ABC
+    standard. There may be a maximum of two alternative endings. Although one
+    could do more than two endings in ABC, using P:parts, I hardly ever see it
+    and therefore have not implemented support for it here. In Henrik
+    Norbeck's tune collection (May 2015), there was not a single one of the
+    2312 tunes that contained a third ending. Enough said.
+    """
+
+    repeat_start = 0
+    repeat_end = 0
+    start = 0
+    ret = []
+
+    while True:
+
+        # When there are no more repeats, or if there were none from the
+        # beginning, we're done.
+        repeat_end = abc.find(':|', start)
+
+        if repeat_end == -1:
+            break
+
+        # Starting repeats (|:) are optional (or perhaps even considered
+        # ugly?) at the beginning of a tune.
+        s = abc.rfind('|:', 0, repeat_end)
+        if s != -1:
+            repeat_start = s + 2
+
+        # If the repeat end (:|) is followed by a digit, we have more than one
+        # ending.
+        if len(abc) > repeat_end + 2 and abc[repeat_end + 2].isdigit():
+            number_of_bars = 1
+
+            # Go backwards one bar and check if the bar divider is followed by
+            # a digit. If not we assume the ending consists of two bars.
+            start_of_first_ending = abc.rfind('|', 0, repeat_end)
+
+            if not abc[start_of_first_ending + 1].isdigit():
+                start_of_first_ending = abc.rfind('|', 0, start_of_first_ending - 1)
+                number_of_bars = 2
+
+            # Doing it this way, we get rid of the digit after the bar
+            # divider.
+            ret.append(abc[repeat_start:start_of_first_ending])
+            ret.append('|')
+            ret.append(abc[start_of_first_ending + 2:repeat_end])
+            ret.append('|')
+
+            start_of_second_ending = repeat_end + 3
+            end_of_second_ending = start_of_second_ending
+
+            # The second ending would probably be the same number of bars as
+            # the first.
+            while number_of_bars > 0:
+                end_of_second_ending = abc.find('|', end_of_second_ending + 1)
+                number_of_bars -= 1
+
+            ret.append(abc[repeat_start:start_of_first_ending])
+            ret.append('|')
+            ret.append(abc[start_of_second_ending:end_of_second_ending])
+            ret.append('|')
+            start = repeat_end + 2
+        else:
+            # Repeat (:|) was not followed by a digit, and expansion is easy.
+            ret.append(abc[repeat_start:repeat_end])
+            ret.append('|')
+            ret.append(abc[repeat_start:repeat_end])
+            ret.append('|')
+            start = repeat_end + 2
+
+    return ''.join(ret)
+
+
 if __name__ == "__main__":
     pieces = parse_file('test.abc')
     # print json.dumps(pieces, sort_keys=True, indent=4)
-    print expand_notes("A3A B2CD|efg2 abc2")
+    # expand_parts("abc abc|bcd bcd|bab bab|]")
+    abc = "|:a b|c d:|\n|:A B|C D:|"
+    abc += "|:e f|g A|1B C:|2D E||"
+    # abc = "aaa|bbb|ccc:|"
+    # abc = "|:aaa|bbb|1ccc:|2ddd|"
+    print abc
+    print expand_parts(abc)
