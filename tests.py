@@ -147,6 +147,19 @@ class ABCManipulationTestCase(unittest.TestCase):
                          'eaae fgaf|e/e/e ef ecAc|eaae fgaf|ecBe cAAB|')
 
 
+    def test_expand_three_part_tune(self):
+        abc = 'B3B {/d}BAGA|B2GB AGEG|DBB/B/B BAGB|A/B/cBG AGEG|'
+        abc += 'B3 B2 A GA|B2GB AGEG|Beed BedB|AdBG A/B/AGE||'
+        abc += '|:DGG/G/G G2BG|G/G/GBG AGEG|DGG/G/G GABc|1dBAc BGGE:|2dBAc BGBc||'
+        abc += '|:d2Bd egge|dB~B2 ABGB|d2Bd egge|1agbg ageg:|2agbg aged|]'
+        expanded = expand_parts(abc)
+        self.assertEqual(expanded,
+            'B3B {/d}BAGA|B2GB AGEG|DBB/B/B BAGB|A/B/cBG AGEG|' +
+            'B3 B2 A GA|B2GB AGEG|Beed BedB|AdBG A/B/AGE|' +
+            'DGG/G/G G2BG|G/G/GBG AGEG|DGG/G/G GABc|dBAc BGGE|' +
+            'DGG/G/G G2BG|G/G/GBG AGEG|DGG/G/G GABc|dBAc BGBc|' +
+            'd2Bd egge|dB~B2 ABGB|d2Bd egge|agbg ageg|' +
+            'd2Bd egge|dB~B2 ABGB|d2Bd egge|agbg aged|')
 
 
 if __name__ == '__main__':
