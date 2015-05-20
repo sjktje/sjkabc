@@ -143,6 +143,28 @@ def strip_bar_dividers(abc):
     return ''.join(ret)
 
 
+def strip_triplets(abc):
+    """
+    Remove duplets, triplets, quadruplets, etc from string.
+
+    Please note that this simply removes the (n and leaves the following
+    notes.
+    """
+    ret = []
+    abc_len = len(abc)
+    i = 0
+
+    while i < abc_len:
+        if abc[i] == '(' and abc_len > i+1 and abc[i+1].isdigit():
+            i += 2
+        else:
+            ret.append(abc[i])
+            i += 1
+
+    return ''.join(ret)
+
+
+
 def expand_notes(abc):
     """
     Expand notes, so that E2 becomes EE et.c.
@@ -159,7 +181,6 @@ def expand_notes(abc):
         prev = c
 
     return ''.join(ret)
-
 
 
 def expand_parts(abc):

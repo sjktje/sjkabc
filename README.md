@@ -5,4 +5,4 @@
 ## TODO
 
 * [x] Create expand_parts.
-* [ ] Create function to strip triplets
+* [x] Create function to strip triplets
