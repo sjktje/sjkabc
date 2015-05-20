@@ -181,70 +181,55 @@ def expand_parts(abc):
     Norbeck's tune collection (May 2015), there was not a single one of the
     2312 tunes that contained a third ending. Enough said.
     """
-
-    repeat_start = 0
-    repeat_end = 0
+    parsed_abc = abc
     start = 0
-    ret = []
+    end = 0
 
     while True:
-
-        # When there are no more repeats, or if there were none from the
-        # beginning, we're done.
-        repeat_end = abc.find(':|', start)
-
-        if repeat_end == -1:
+        end = parsed_abc.find(':|', start)
+        if (end == -1):
             break
 
-        # Starting repeats (|:) are optional (or perhaps even considered
-        # ugly?) at the beginning of a tune.
-        s = abc.rfind('|:', 0, repeat_end)
-        if s != -1:
-            repeat_start = s + 2
+        new_start = parsed_abc.rfind('|:', 0, end)
+        if (new_start != -1):
+            start = new_start+2
 
-        # If the repeat end (:|) is followed by a digit, we have more than one
-        # ending.
-        if len(abc) > repeat_end + 2 and abc[repeat_end + 2].isdigit():
-            number_of_bars = 1
+        tmp = []
+        if end + 2 < len(parsed_abc) and parsed_abc[end+2].isdigit():
+            first_ending_start = parsed_abc.rfind('|', 0, end)
+            num_bars = 1
+            if not parsed_abc[first_ending_start+1].isdigit():
+                first_ending_start = parsed_abc.rfind('|', 0, first_ending_start)
+                num_bars = 2
 
-            # Go backwards one bar and check if the bar divider is followed by
-            # a digit. If not we assume the ending consists of two bars.
-            start_of_first_ending = abc.rfind('|', 0, repeat_end)
+            tmp.append(parsed_abc[start:first_ending_start])
+            tmp.append('|')
+            tmp.append(parsed_abc[first_ending_start+2:end])
+            tmp.append('|')
 
-            if not abc[start_of_first_ending + 1].isdigit():
-                start_of_first_ending = abc.rfind('|', 0, start_of_first_ending - 1)
-                number_of_bars = 2
+            second_ending_start = end+2
+            second_ending_end = None
+            for i in xrange(num_bars):
+                second_ending_end = parsed_abc.find('|', second_ending_start)
 
-            # Doing it this way, we get rid of the digit after the bar
-            # divider.
-            ret.append(abc[repeat_start:start_of_first_ending])
-            ret.append('|')
-            ret.append(abc[start_of_first_ending + 2:repeat_end])
-            ret.append('|')
-
-            start_of_second_ending = repeat_end + 3
-            end_of_second_ending = start_of_second_ending
-
-            # The second ending would probably be the same number of bars as
-            # the first.
-            while number_of_bars > 0:
-                end_of_second_ending = abc.find('|', end_of_second_ending + 1)
-                number_of_bars -= 1
-
-            ret.append(abc[repeat_start:start_of_first_ending])
-            ret.append('|')
-            ret.append(abc[start_of_second_ending:end_of_second_ending])
-            ret.append('|')
-            start = repeat_end + 2
+            tmp.append(parsed_abc[start:first_ending_start])
+            tmp.append('|')
+            tmp.append(parsed_abc[second_ending_start+1:second_ending_end])
+            parsed_abc = parsed_abc.replace(
+                                    parsed_abc[start:second_ending_end],
+                                    ''.join(tmp), 1)
+            start += len(tmp)
         else:
-            # Repeat (:|) was not followed by a digit, and expansion is easy.
-            ret.append(abc[repeat_start:repeat_end])
-            ret.append('|')
-            ret.append(abc[repeat_start:repeat_end])
-            ret.append('|')
-            start = repeat_end + 2
+            tmp.append(parsed_abc[start:end])
+            tmp.append('|')
+            tmp.append(parsed_abc[start:end])
+            tmp.append('|')
+            parsed_abc = parsed_abc.replace(parsed_abc[start:end+2],
+                                          ''.join(tmp), 1)
+            start += len(tmp)
 
-    return ''.join(ret)
+    parsed_abc = parsed_abc.replace('|:', '').replace(':', '').replace('||', '|').replace(']', '')
+    return parsed_abc
 
 
 if __name__ == "__main__":
@@ -257,3 +242,5 @@ if __name__ == "__main__":
     # abc = "|:aaa|bbb|1ccc:|2ddd|"
     print abc
     print expand_parts(abc)
+
+
