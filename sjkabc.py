@@ -284,6 +284,27 @@ def strip_extra_chars(abc):
     return ''.join(ret)
 
 
+def expand_abc(abc):
+    """
+    Create searchable abc string
+
+    This runs all the stripping and expanding functions on the input string,
+    and also makes it lowercase.
+    """
+    ret = strip_octave(abc)
+    ret = strip_accidentals(ret)
+    ret = strip_triplets(ret)
+    ret = strip_chords(ret)
+    ret = strip_ornaments(ret)
+    ret = expand_notes(ret)
+    ret = expand_parts(ret)
+    ret = strip_whitespace(ret)
+    ret = strip_bar_dividers(ret)
+    ret = strip_extra_chars(ret)
+    ret = ret.lower()
+    return ret
+
+
 if __name__ == "__main__":
     pieces = parse_file('test.abc')
     # print json.dumps(pieces, sort_keys=True, indent=4)

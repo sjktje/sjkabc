@@ -5,7 +5,7 @@ import unittest
 from sjkabc import strip_ornaments, strip_whitespace, strip_accidentals
 from sjkabc import strip_octave, strip_bar_dividers, expand_notes
 from sjkabc import expand_parts, strip_triplets, strip_chords
-from sjkabc import strip_extra_chars
+from sjkabc import strip_extra_chars, expand_abc
 
 
 class ABCManipulationTestCase(unittest.TestCase):
@@ -179,6 +179,24 @@ class ABCManipulationTestCase(unittest.TestCase):
         abc = 'A/B/c e<cd>|cBAF ABce\\|dBGA BdcB'
         stripped = strip_extra_chars(abc)
         self.assertEqual(stripped, 'ABc ecd|cBAF ABce|dBGA BdcB')
+
+
+    def test_expand_abc(self):
+        abc = 'A2eA BAec|ABcd egdB|G2dG BGdG|G/G/G dG BAGB|\\'
+        abc += 'A2eA BAec|ABcd egdB|GABd eaaf|1gedB BAAG:|2gedB BAce||'
+        abc += '|:a2ea ageg|agbg agea|gedc BGBd|~g3a bgeg|\n'
+        abc += 'a2ea ageg|agbg ageg|~d3e ~g3e|1dBGB BAce:|2dBGB BAAG|]'
+        expected = 'aaeabaecabcdegdbggdgbgdggggdgbagb'
+        expected += 'aaeabaecabcdegdbgabdeaafgedbbaag'
+        expected += 'aaeabaecabcdegdbggdgbgdggggdgbagb'
+        expected += 'aaeabaecabcdegdbgabdeaafgedbbace'
+
+        expected += 'aaeaagegagbgageagedcbgbdgggabgeg'
+        expected += 'aaeaagegagbgagegdddegggedbgbbace'
+        expected += 'aaeaagegagbgageagedcbgbdgggabgeg'
+        expected += 'aaeaagegagbgagegdddegggedbgbbaag'
+        processed = expand_abc(abc)
+        self.assertEqual(processed, expected)
 
 
 if __name__ == '__main__':
