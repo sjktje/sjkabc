@@ -39,7 +39,7 @@ class ABCManipulationTestCase(unittest.TestCase):
 
 
     def test_strip_whitespace(self):
-        abc = 'abcd efga|dega bega|{/d}ABcd BEGA'
+        abc = 'abcd efga|dega\r bega\n|{/d}ABcd BEGA'
         stripped = strip_whitespace(abc)
         self.assertEqual(stripped, 'abcdefga|degabega|{/d}ABcdBEGA')
 

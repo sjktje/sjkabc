@@ -92,8 +92,13 @@ def strip_ornaments(abc):
 
 
 def strip_whitespace(abc):
-    """Remove whitespace from string."""
-    return abc.replace(' ', '')
+    """Remove whitespace and newlines from string."""
+    ret = []
+    for c in abc:
+        if c in [' ', '\n', '\r']:
+            continue
+        ret.append(c)
+    return ''.join(ret)
 
 
 def strip_accidentals(abc):
@@ -162,7 +167,6 @@ def strip_triplets(abc):
             i += 1
 
     return ''.join(ret)
-
 
 
 def expand_notes(abc):
