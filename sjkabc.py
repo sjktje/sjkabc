@@ -257,6 +257,24 @@ def expand_parts(abc):
     return parsed_abc
 
 
+def strip_chords(abc):
+    """Strip chords and 'guitar chords' from string."""
+    ret = []
+    in_chord = False
+
+    for c in abc:
+        if c == '[' or (c == '"' and not in_chord):
+            in_chord = True
+        elif c == ']' or (c == '"' and in_chord):
+            in_chord = False
+        elif in_chord:
+            continue
+        else:
+            ret.append(c)
+
+    return ''.join(ret)
+
+
 if __name__ == "__main__":
     pieces = parse_file('test.abc')
     # print json.dumps(pieces, sort_keys=True, indent=4)

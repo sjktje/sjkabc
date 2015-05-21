@@ -4,7 +4,7 @@
 import unittest
 from sjkabc import strip_ornaments, strip_whitespace, strip_accidentals
 from sjkabc import strip_octave, strip_bar_dividers, expand_notes
-from sjkabc import expand_parts, strip_triplets
+from sjkabc import expand_parts, strip_triplets, strip_chords
 
 
 class ABCManipulationTestCase(unittest.TestCase):
@@ -166,6 +166,13 @@ class ABCManipulationTestCase(unittest.TestCase):
         abc = "abc (3bbb|bab (3abc|(3GDF bab"
         stripped = strip_triplets(abc)
         self.assertEqual(stripped, 'abc bbb|bab abc|GDF bab')
+
+
+    def test_strip_chords(self):
+        abc = '"Gm" GABd|[C,c]def'
+        stripped = strip_chords(abc)
+        self.assertEqual(stripped, ' GABd|def')
+
 
 if __name__ == '__main__':
     unittest.main()
