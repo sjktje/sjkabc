@@ -275,6 +275,15 @@ def strip_chords(abc):
     return ''.join(ret)
 
 
+def strip_extra_chars(abc):
+    ret = []
+    for c in abc:
+        if c in ['/', '\\', '<', '>']:
+            continue
+        ret.append(c)
+    return ''.join(ret)
+
+
 if __name__ == "__main__":
     pieces = parse_file('test.abc')
     # print json.dumps(pieces, sort_keys=True, indent=4)
