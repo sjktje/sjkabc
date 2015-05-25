@@ -234,7 +234,7 @@ def expand_parts(abc):
 
             second_ending_start = end+2
             second_ending_end = None
-            for i in xrange(num_bars):
+            for i in range(num_bars):
                 second_ending_end = parsed_abc.find('|', second_ending_start)
 
             tmp.append(parsed_abc[start:first_ending_start])
@@ -313,7 +313,7 @@ if __name__ == "__main__":
     abc += "|:e f|g A|1B C:|2D E||"
     # abc = "aaa|bbb|ccc:|"
     # abc = "|:aaa|bbb|1ccc:|2ddd|"
-    print abc
-    print expand_parts(abc)
+    print(abc)
+    print((expand_parts(abc)))
 
 
