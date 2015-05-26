@@ -68,8 +68,9 @@ def parse_file(filename):
         ]
     }
 
-    Some dict items _need_ to be lists (like 'title'), but all items except
-    'abc' _are_ lists for the sake of consistency.
+    Some dict items _need_ to be lists (like 'title'), but all items
+    _are_ lists for the sake of consistency. The only exception to this is
+    'abc', which is a string.
     """
 
     tune = collections.defaultdict(list)
