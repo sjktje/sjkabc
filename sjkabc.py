@@ -6,6 +6,7 @@ a SQL database.
 """
 import collections
 import json
+import os
 
 header_keys = dict(
     A='area',
@@ -98,6 +99,16 @@ def parse_file(filename):
                 tune['abc'] = line.strip()
         else:
             if tune:
+                yield tune
+
+
+def parse_dir(dir):
+    """
+    Same as parse_file, but works recursively on all .abc files in dir.
+    """
+    for dirpath, dirnames, filenames in os.walk(dir):
+        for filename in [f for f in filenames if f.endswith('.abc')]:
+            for tune in parse_file(os.path.join(dirpath, filename)):
                 yield tune
 
 
