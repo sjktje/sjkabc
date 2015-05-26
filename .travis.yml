@@ -1,3 +1,5 @@
 language: python
 script: "./tests.py"
 install: true
+after_success:
+    - coveralls
