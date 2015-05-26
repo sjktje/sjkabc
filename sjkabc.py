@@ -16,8 +16,8 @@ header_keys = dict(
     H='history',
     I='instruction',
     K='key',
-    L='metre',
-    M='meter',
+    L='note_length',
+    M='metre',
     N='notes',
     O='origin',
     Q='tempo',
@@ -31,40 +31,73 @@ header_keys = dict(
 
 def parse_file(filename):
     """
-    Parse a file containing one or several tunes.
+    Parse file and yield found ABC tunes (as dicts).
 
-    Return list of dictionaries of lists (jikes).
+    Output will look like:
+
+    {
+        "title": [
+            "Apples In Winter",
+            "Fictional second name",
+            "Fictional third name"
+        ],
+        "metre": [
+            "6/8"
+        ],
+        "composer": [
+            "Trad."
+        ],
+        "rhythm": [
+            "Jig"
+        ],
+        "index": "37",
+        "transcription": [
+            "Svante Kvarnstr\\\"om"
+        ],
+        "abc": [
+            "BEE BEE|Bdf edB|BAF FEF|DFA BAF|",
+            "BEE BEE|Bdf edB|BAB dAF|1FED EGA:|2FED EAc||",
+            "|:e2f gfe|eae edB|BAF FEF|DFA BAF|",
+            "e2f gfe|eae edB|BAB dAF|1FED EAc:|2FED E3|]"
+        ],
+        "key": [
+            "Em"
+        ],
+        "note_length": [
+            "1/8"
+        ]
+    }
+
+    Some dict items _need_ to be lists (like 'title'), but all items except
+    'abc' _are_ lists for the sake of consistency.
     """
 
+    tune = collections.defaultdict(list)
     in_header = False
-    pieces = []
 
     with open(filename, 'r') as f:
         for line in f:
-
             line = line.strip()
-
             if line == '' or line.startswith('%'):
                 continue
 
-            if line[0:2] == 'X:' and line[3].isdigit():
+            if line.startswith('X:'):
+                if tune:
+                    yield tune
+                    tune.clear()
                 in_header = True
-                pieces.append({})
-                pieces[-1] = collections.defaultdict(list)
-                piece = pieces[-1]
-                piece['index'] = line[3:].strip()
-                continue
 
             if in_header:
-                (key, value) = line.split(':')
+                (key, value) = line.split(':', 1)
                 if key in header_keys:
-                    piece[header_keys[key]].append(value.strip())
+                    tune[header_keys[key]].append(value.strip())
                 if key == 'K':
                     in_header = False
             else:
-                piece['abc'].append(line)
-
-    return pieces
+                tune['abc'] = line.strip()
+        else:
+            if tune:
+                yield tune
 
 
 def strip_ornaments(abc):
