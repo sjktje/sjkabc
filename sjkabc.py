@@ -49,7 +49,9 @@ def parse_abc(abc):
         "rhythm": [
             "Jig"
         ],
-        "index": "37",
+        "index": [
+            "37"
+        ],
         "transcription": [
             "Svante Kvarnstr\\\"om"
         ],
@@ -66,10 +68,6 @@ def parse_abc(abc):
             "1/8"
         ]
     }
-
-    Some dict items _need_ to be lists (like 'title'), but all items
-    _are_ lists for the sake of consistency. The only exception to this is
-    'abc', which is a string.
     """
     tune = collections.defaultdict(list)
     in_header = False
@@ -92,7 +90,7 @@ def parse_abc(abc):
             if key == 'K':
                 in_header = False
         else:
-            tune['abc'] = line.strip()
+            tune['abc'].append(line)
     else:
         if tune:
             yield tune
