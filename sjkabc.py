@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-Module for parsing text files containing ABC music notation and putting it in
-a SQL database.
+Module for parsing ABC music notation.
 """
 import collections
 import json
@@ -366,5 +365,3 @@ if __name__ == "__main__":
     # abc = "|:aaa|bbb|1ccc:|2ddd|"
     print(abc)
     print((expand_parts(abc)))
-
-
