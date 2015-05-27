@@ -29,10 +29,9 @@ header_keys = dict(
     Z='transcription'
 )
 
-
-def parse_file(filename):
+def parse_abc(abc):
     """
-    Parse file and yield found ABC tunes (as dicts).
+    Parse string and yield found ABC tunes (as dicts).
 
     Output will look like:
 
@@ -73,33 +72,40 @@ def parse_file(filename):
     _are_ lists for the sake of consistency. The only exception to this is
     'abc', which is a string.
     """
-
     tune = collections.defaultdict(list)
     in_header = False
 
-    with open(filename, 'r') as f:
-        for line in f:
-            line = line.strip()
-            if line == '' or line.startswith('%'):
-                continue
+    for line in abc:
+        line = line.strip()
+        if line == '' or line.startswith('%'):
+            continue
 
-            if line.startswith('X:'):
-                if tune:
-                    yield tune
-                    tune.clear()
-                in_header = True
-
-            if in_header:
-                (key, value) = line.split(':', 1)
-                if key in header_keys:
-                    tune[header_keys[key]].append(value.strip())
-                if key == 'K':
-                    in_header = False
-            else:
-                tune['abc'] = line.strip()
-        else:
+        if line.startswith('X:'):
             if tune:
                 yield tune
+                tune.clear()
+            in_header = True
+
+        if in_header:
+            (key, value) = line.split(':', 1)
+            if key in header_keys:
+                tune[header_keys[key]].append(value.strip())
+            if key == 'K':
+                in_header = False
+        else:
+            tune['abc'] = line.strip()
+    else:
+        if tune:
+            yield tune
+
+
+def parse_file(filename):
+    """
+    Like parse_abc but operates on a file.
+    """
+    with open(filename, 'r') as f:
+        for tune in parse_abc(f):
+            yield tune
 
 
 def parse_dir(dir):
