@@ -27,6 +27,7 @@ header_keys = dict(
     Z='transcription'
 )
 
+
 def parse_abc(abc):
     """
     Parse string and yield found ABC tunes (as dicts).
@@ -131,10 +132,10 @@ def strip_ornaments(abc):
         if not in_gracenote and c != '~':
             tmp.append(c)
     ret = ''.join(tmp)
-    ret = ret.replace('!trill(!','')
-    ret = ret.replace('!trill)!','')
-    ret = ret.replace('!turn!','')
-    ret = ret.replace('!fermata!','')
+    ret = ret.replace('!trill(!', '')
+    ret = ret.replace('!trill)!', '')
+    ret = ret.replace('!turn!', '')
+    ret = ret.replace('!fermata!', '')
     return ret
 
 
@@ -271,7 +272,8 @@ def expand_parts(abc):
             first_ending_start = parsed_abc.rfind('|', 0, end)
             num_bars = 1
             if not parsed_abc[first_ending_start+1].isdigit():
-                first_ending_start = parsed_abc.rfind('|', 0, first_ending_start)
+                first_ending_start = parsed_abc.rfind('|', 0,
+                                                      first_ending_start)
                 num_bars = 2
 
             tmp.append(parsed_abc[start:first_ending_start])
@@ -288,8 +290,8 @@ def expand_parts(abc):
             tmp.append('|')
             tmp.append(parsed_abc[second_ending_start+1:second_ending_end])
             parsed_abc = parsed_abc.replace(
-                                    parsed_abc[start:second_ending_end],
-                                    ''.join(tmp), 1)
+                parsed_abc[start:second_ending_end],
+                ''.join(tmp), 1)
             start += len(tmp)
         else:
             tmp.append(parsed_abc[start:end])
@@ -297,10 +299,13 @@ def expand_parts(abc):
             tmp.append(parsed_abc[start:end])
             tmp.append('|')
             parsed_abc = parsed_abc.replace(parsed_abc[start:end+2],
-                                          ''.join(tmp), 1)
+                                            ''.join(tmp), 1)
             start += len(tmp)
 
-    parsed_abc = parsed_abc.replace('|:', '').replace(':', '').replace('||', '|').replace(']', '')
+    parsed_abc = parsed_abc.replace('|:', '')
+    parsed_abc = parsed_abc.replace(':', '')
+    parsed_abc = parsed_abc.replace('||', '|')
+    parsed_abc = parsed_abc.replace(']', '')
     return parsed_abc
 
 
