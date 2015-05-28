@@ -4,7 +4,6 @@
 Module for parsing ABC music notation.
 """
 import collections
-import json
 import os
 
 header_keys = dict(
