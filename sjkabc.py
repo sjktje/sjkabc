@@ -143,6 +143,17 @@ class Parser:
             return False
 
 
+def parse_file(filename):
+    """
+    Like parse_abc but operates on a file.
+    """
+    with open(filename, 'r') as f:
+        abc = f.read()
+
+    for tune in Parser(abc):
+        yield tune
+
+
 def parse_dir(dir):
     """
     Same as parse_file, but works recursively on all .abc files in dir.
@@ -396,32 +407,5 @@ def expand_abc(abc):
 
 
 if __name__ == "__main__":
-    test_tune = """
-X:1
-T:Test
-C:Trad.
-R:Reel
-O:Ireland
-S:Source
-H:history...
-M:4/4
-L:1/8
-Z:John Smith
-K:G
-abcd abcd|ecda ecda:|
-
-X:2
-T:Test 2
-C:Trad.
-R:Jig
-O:Sweden
-S:Source
-H:history...
-M:6/8
-L:1/8
-Z:John Smith
-K:E
-abc acd|eca eda:|
-"""
-    for tune in Parser(test_tune):
+    for tune in parse_file('test.abc'):
         print(tune)
