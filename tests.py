@@ -6,7 +6,7 @@ from sjkabc import strip_ornaments, strip_whitespace, strip_accidentals
 from sjkabc import strip_octave, strip_bar_dividers, expand_notes
 from sjkabc import expand_parts, strip_triplets, strip_chords
 from sjkabc import strip_extra_chars, expand_abc
-from sjkabc import Tune, header_keys, Parser
+from sjkabc import Tune, HEADER_KEYS, Parser
 
 
 class ABCManipulationTestCase(unittest.TestCase):
@@ -185,8 +185,8 @@ class ABCManipulationTestCase(unittest.TestCase):
 
         """
         tune = Tune()
-        for key in header_keys:
-            self.assertEqual(getattr(tune, header_keys[key]), [])
+        for key in HEADER_KEYS:
+            self.assertEqual(getattr(tune, HEADER_KEYS[key]), [])
 
         for attr in ['abc', 'expanded_abc']:
             self.assertEqual(getattr(tune, attr), [])

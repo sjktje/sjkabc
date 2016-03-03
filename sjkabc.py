@@ -5,7 +5,7 @@ Module for parsing ABC music notation.
 """
 import os
 
-header_keys = dict(
+HEADER_KEYS = dict(
     A='area',
     B='book',
     C='composer',
@@ -36,8 +36,8 @@ class Tune:
         self.abc = []
         self.expanded_abc = []
 
-        for key in header_keys:
-            setattr(self, header_keys[key], [])
+        for key in HEADER_KEYS:
+            setattr(self, HEADER_KEYS[key], [])
 
     def __str__(self):
         return self.title[0]
@@ -89,8 +89,8 @@ class Parser:
 
             if in_header:
                 (key, value) = line.split(':', 1)
-                if key in header_keys:
-                    getattr(current_tune, header_keys[key]).append(value.strip())
+                if key in HEADER_KEYS:
+                    getattr(current_tune, HEADER_KEYS[key]).append(value.strip())
 
                 # Header ends at K:
                 if self._line_is_key(line):
