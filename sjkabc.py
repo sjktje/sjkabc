@@ -3,7 +3,6 @@
 """
 Module for parsing ABC music notation.
 """
-import collections
 import os
 
 header_keys = dict(
@@ -28,81 +27,130 @@ header_keys = dict(
 )
 
 
-def parse_abc(abc):
-    """
-    Parse string and yield found ABC tunes (as dicts).
+class Tune:
 
-    Output will look like:
+    """TODO: Tune class docstring"""
 
-    {
-        "title": [
-            "Apples In Winter",
-            "Fictional second name",
-            "Fictional third name"
-        ],
-        "metre": [
-            "6/8"
-        ],
-        "composer": [
-            "Trad."
-        ],
-        "rhythm": [
-            "Jig"
-        ],
-        "index": [
-            "37"
-        ],
-        "transcription": [
-            "Svante Kvarnstr\\\"om"
-        ],
-        "abc": [
-            "BEE BEE|Bdf edB|BAF FEF|DFA BAF|",
-            "BEE BEE|Bdf edB|BAB dAF|1FED EGA:|2FED EAc||",
-            "|:e2f gfe|eae edB|BAF FEF|DFA BAF|",
-            "e2f gfe|eae edB|BAB dAF|1FED EAc:|2FED E3|]"
-        ],
-        "key": [
-            "Em"
-        ],
-        "note_length": [
-            "1/8"
-        ]
-    }
-    """
-    tune = collections.defaultdict(list)
-    in_header = False
+    def __init__(self):
+        """Initialise Tune"""
+        self.abc = []
+        self.expanded_abc = []
 
-    for line in abc:
-        line = line.strip()
-        if line == '' or line.startswith('%'):
-            continue
+        for key in header_keys:
+            setattr(self, header_keys[key], [])
 
-        if line.startswith('X:'):
-            if tune:
-                yield tune
-                tune.clear()
-            in_header = True
+    def __str__(self):
+        return self.title[0]
 
-        if in_header:
-            (key, value) = line.split(':', 1)
-            if key in header_keys:
-                tune[header_keys[key]].append(value.strip())
-            if key == 'K':
-                in_header = False
+class Parser:
+
+    def __init__(self, abc):
+        """TODO: Docstring for __init__.
+        :param: src string
+        :returns: TODO
+
+        """
+        self.tunes = []
+        self.parse(abc)
+        self.index = len(self.tunes)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index == 0:
+            raise StopIteration
+        self.index = self.index - 1
+        return self.tunes[self.index]
+
+    def parse(self, abc):
+        """Parse ABC notation.
+
+        :param abc: string containing abc to parse
+        :returns: `Tune`
+
+        """
+        in_header = False
+        current_tune = None
+
+
+        for line in abc.splitlines():
+            if self._line_empty(line) or self._line_comment(line):
+                continue
+
+            # At beginning of header
+            if self._line_is_index(line):
+                if current_tune:
+                    # We have a parsed tune already, append it to list of
+                    # tunes.
+                    self.tunes.append(current_tune)
+
+                in_header = True
+                current_tune = Tune()
+
+            if in_header:
+                (key, value) = line.split(':', 1)
+                if key in header_keys:
+                    getattr(current_tune, header_keys[key]).append(value.strip())
+
+                # Header ends at K:
+                if self._line_is_key(line):
+                    in_header = False
+
+            else:
+                if current_tune:
+                    current_tune.abc.append(line)
+
         else:
-            tune['abc'].append(line)
-    else:
-        if tune:
-            yield tune
+            if current_tune:
+                self.tunes.append(current_tune)
+
+    def _line_is_key(self, line):
+        """TODO: Docstring for _line_is_key.
+
+        :param line: TODO
+        :returns: TODO
+
+        """
+        if line.startswith('K:'):
+            return True
+        else:
+            return False
+
+    def _line_empty(self, line):
+        line = line.strip()
+        if line == '':
+            return True
+        else:
+            return False
+
+    def _line_comment(self, line):
+        line = line.strip()
+        if line.startswith('%'):
+            return True
+        else:
+            return False
+
+    def _line_is_index(self, line):
+        """Check if line is an index line (X:).
+
+        :param line: TODO
+        :returns: TODO
+
+        """
+        if line.startswith('X:'):
+            return True
+        else:
+            return False
 
 
-def parse_file(filename):
-    """
-    Like parse_abc but operates on a file.
-    """
-    with open(filename, 'r') as f:
-        for tune in parse_abc(f):
-            yield tune
+# def parse_file(filename):
+#     """
+#     Like parse_abc but operates on a file.
+#     """
+#     with open(filename, 'r') as f:
+#         for tune in parse_abc(f):
+#             yield tune
 
 
 def parse_dir(dir):
@@ -358,12 +406,32 @@ def expand_abc(abc):
 
 
 if __name__ == "__main__":
-    pieces = parse_file('test.abc')
-    # print json.dumps(pieces, sort_keys=True, indent=4)
-    # expand_parts("abc abc|bcd bcd|bab bab|]")
-    abc = "|:a b|c d:|\n|:A B|C D:|"
-    abc += "|:e f|g A|1B C:|2D E||"
-    # abc = "aaa|bbb|ccc:|"
-    # abc = "|:aaa|bbb|1ccc:|2ddd|"
-    print(abc)
-    print((expand_parts(abc)))
+    test_tune = """
+X:1
+T:Test
+C:Trad.
+R:Reel
+O:Ireland
+S:Source
+H:history...
+M:4/4
+L:1/8
+Z:John Smith
+K:G
+abcd abcd|ecda ecda:|
+
+X:2
+T:Test 2
+C:Trad.
+R:Jig
+O:Sweden
+S:Source
+H:history...
+M:6/8
+L:1/8
+Z:John Smith
+K:E
+abc acd|eca eda:|
+"""
+    for tune in Parser(test_tune):
+        print(tune)
