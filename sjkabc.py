@@ -181,10 +181,8 @@ def strip_ornaments(abc):
         if not in_gracenote and c != '~':
             tmp.append(c)
     ret = ''.join(tmp)
-    ret = ret.replace('!trill(!', '')
-    ret = ret.replace('!trill)!', '')
-    ret = ret.replace('!turn!', '')
-    ret = ret.replace('!fermata!', '')
+    for rep in ['!trill(!', '!trill)!', '!turn!', '!fermata!']:
+        ret = ret.replace(rep, '')
     return ret
 
 
