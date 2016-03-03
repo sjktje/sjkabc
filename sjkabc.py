@@ -349,10 +349,10 @@ def expand_parts(abc):
                                             ''.join(tmp), 1)
             start += len(tmp)
 
-    parsed_abc = parsed_abc.replace('|:', '')
-    parsed_abc = parsed_abc.replace(':', '')
+    for rep in ['|:', ':', ']']:
+        parsed_abc = parsed_abc.replace(rep, '')
     parsed_abc = parsed_abc.replace('||', '|')
-    parsed_abc = parsed_abc.replace(']', '')
+
     return parsed_abc
 
 
