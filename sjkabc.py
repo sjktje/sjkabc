@@ -143,15 +143,6 @@ class Parser:
             return False
 
 
-# def parse_file(filename):
-#     """
-#     Like parse_abc but operates on a file.
-#     """
-#     with open(filename, 'r') as f:
-#         for tune in parse_abc(f):
-#             yield tune
-
-
 def parse_dir(dir):
     """
     Same as parse_file, but works recursively on all .abc files in dir.
