@@ -44,14 +44,14 @@ class Tune:
 
 class Parser:
 
-    def __init__(self, src):
+    def __init__(self, abc):
         """TODO: Docstring for __init__.
         :param: src string
         :returns: TODO
 
         """
         self.tunes = []
-        self.parse(src)
+        self.parse(abc)
         self.index = len(self.tunes)
 
     def __iter__(self):
@@ -63,7 +63,7 @@ class Parser:
         self.index = self.index - 1
         return self.tunes[self.index]
 
-    def parse(self, src):
+    def parse(self, abc):
         """Parse ABC notation.
 
         :param abc: string containing abc to parse
