@@ -33,11 +33,20 @@ class Tune:
 
     def __init__(self):
         """Initialise Tune"""
-        self.abc = []
+        self._abc = []
         self.expanded_abc = []
 
         for key in HEADER_KEYS:
             setattr(self, HEADER_KEYS[key], [])
+
+    @property
+    def abc(self):
+        return self._abc
+
+    @abc.setter
+    def abc(self, abc):
+        self.expanded_abc = expand_abc(abc)
+        return self._abc
 
     def __str__(self):
         return self.title[0]
