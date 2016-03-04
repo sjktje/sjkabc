@@ -99,9 +99,9 @@ class Parser:
                 current_tune = Tune()
 
             if in_header:
-                (key, value) = line.split(':', 1)
+                (key, val) = line.split(':', 1)
                 if key in HEADER_KEYS:
-                    getattr(current_tune, HEADER_KEYS[key]).append(value.strip())
+                    getattr(current_tune, HEADER_KEYS[key]).append(val.strip())
 
                 # Header ends at K:
                 if self._line_is_key(line):
