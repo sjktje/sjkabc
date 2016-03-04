@@ -1,7 +1,13 @@
 #!/usr/bin/env python
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 """
-Module for parsing ABC music notation.
+    sjkabc.sjkabc
+    ~~~~~~~~~~~~~
+
+    This module provides functionality for parsing ABC music notation.
+
+    :copyright: (c) 2016 by Svante Kvarnström
+    :license: BSD, see LICENSE for more details.
 """
 import os
 
@@ -30,7 +36,23 @@ HEADER_KEYS = dict(
 
 class Tune:
 
-    """TODO: Tune class docstring"""
+    """
+    This class represents a parsed tune.
+
+    Its attributes are generated from `HEADER_KEYS`, with the addition of
+    `abc` and `expanded_abc`. The expanded_abc attribute is automatically
+    populated.
+
+    :Example:
+
+        >>> t = Tune()
+        >>> t.title = 'Example tune'
+        >>> t.abc = '|:abc abc:|'
+        >>> t.expanded_abc
+        'abcabcabcabc'
+
+    .. seealso:: `HEADER_KEYS`, `Parser`, `Parser.expand_abc`
+    """
 
     def __init__(self):
         """Initialise Tune"""
@@ -55,10 +77,25 @@ class Tune:
 
 class Parser:
 
+    """
+    This class provides iterable parsing capabilities.
+
+    `Parser` must be initialised with a string containing ABC music
+    notation. This class is iterable and will return a `Tune` object
+    for every tune found in the provided ABC notation.
+
+    :Example:
+
+    for tune in Parser(abc):
+        print('Parsed ', tune.title)
+
+    .. seealso:: Tune
+    """
+
     def __init__(self, abc):
-        """TODO: Docstring for __init__.
-        :param: src string
-        :returns: TODO
+        """Initialise Parser
+
+        :param abc: string containing ABC to parse
 
         """
         self.tunes = []
@@ -77,8 +114,9 @@ class Parser:
     def parse(self, abc):
         """Parse ABC notation.
 
+        This function will append found ABC tunes to `self.tunes`.
+
         :param abc: string containing abc to parse
-        :returns: `Tune`
 
         """
         in_header = False
@@ -116,10 +154,10 @@ class Parser:
                 self.tunes.append(current_tune)
 
     def _line_is_key(self, line):
-        """TODO: Docstring for _line_is_key.
+        """Check if line is a K: line
 
-        :param line: TODO
-        :returns: TODO
+        :param line: line to check
+        :returns: True if line is a key line and False if not.
 
         """
         if line.startswith('K:'):
@@ -128,6 +166,12 @@ class Parser:
             return False
 
     def _line_empty(self, line):
+        """Check if line is empty
+
+        :param line: line to check
+        :returns: True if line is empty and False if not.
+
+        """
         line = line.strip()
         if line == '':
             return True
@@ -135,6 +179,12 @@ class Parser:
             return False
 
     def _line_comment(self, line):
+        """Check if line is a comment
+
+        :param line: line to check
+        :returns: True if line is a comment and False if not.
+
+        """
         line = line.strip()
         if line.startswith('%'):
             return True
@@ -144,8 +194,9 @@ class Parser:
     def _line_is_index(self, line):
         """Check if line is an index line (X:).
 
-        :param line: TODO
-        :returns: TODO
+        If it is, it is considered to be the start of a tune.
+        :param line: line to check
+        :returns: True if line is a index line, False if not.
 
         """
         if line.startswith('X:'):
@@ -155,8 +206,19 @@ class Parser:
 
 
 def parse_file(filename):
-    """
-    Like parse_abc but operates on a file.
+    """Run Parser on file contents
+
+    This function is iterable.
+
+    :Example:
+
+        >>> for tune in parse_file('test.abc'):
+        ...    print(tune.title)
+
+    :param filename: Name of file to parse
+    :returns: `Tune` object for every found tune.
+
+    .. seealso:: parse_dir, Parser, Tune
     """
     with open(filename, 'r') as f:
         abc = f.read()
@@ -166,8 +228,13 @@ def parse_file(filename):
 
 
 def parse_dir(dir):
-    """
-    Same as parse_file, but works recursively on all .abc files in dir.
+    """Run `Parser` on every file with .abc extension in `dir`
+
+    :param dir: Directory of abc files
+    :returns: `Tune` object for every found file
+
+    .. seealso:: parse_file, Parser, Tune
+
     """
     for dirpath, dirnames, filenames in os.walk(dir):
         for filename in [f for f in filenames if f.endswith('.abc')]:
@@ -176,8 +243,11 @@ def parse_dir(dir):
 
 
 def strip_ornaments(abc):
-    """
-    Remove gracenotes, tildes, trills, turns and fermatas from string.
+    """Remove gracenotes, tildes, trills, turns and fermatas from string.
+
+    :param abc: abc to filter
+    :returns: string of filtered abc
+
     """
 
     tmp = []
@@ -198,19 +268,33 @@ def strip_ornaments(abc):
 
 
 def strip_whitespace(abc):
-    """Remove whitespace and newlines from string."""
+    """Remove whitespace and newlines from string.
+
+    :param abc: string of abc to filter
+    :returns: string of abc with whitespace removed
+    """
     return ''.join(abc.split())
 
 
 def strip_accidentals(abc):
-    """Remove accidentals from string."""
+    """Remove accidentals (=, ^, _) from string.
+
+    :param abc: string of abc to filter
+    :returns: string of abc with accidentals removed
+
+    """
     for rep in '=^_':
         abc = abc.replace(rep, '')
     return abc
 
 
 def strip_octave(abc):
-    """Remove octave specifiers from string."""
+    """Remove octave specifiers from string.
+
+    :param abc: string of abc to filter
+    :returns: string of abc with octave specifiers removed
+
+    """
     for rep in ',\'':
         abc = abc.replace(rep, '')
     return abc
@@ -228,6 +312,10 @@ def strip_bar_dividers(abc):
     becomes
 
     ABCD ABCDABCD abcd:|bcde BCDE
+
+    :param abc: string of abc to filter
+    :returns: string of abc without bar dividers
+
     """
     ret = []
     prev = None
@@ -247,7 +335,12 @@ def strip_triplets(abc):
 
     Please note that this simply removes the (n and leaves the following
     notes.
+
+    :param abc: string of abc to filter
+    :returns: string of abc without triplets
+
     """
+
     ret = []
     abc_len = len(abc)
     i = 0
@@ -265,6 +358,9 @@ def strip_triplets(abc):
 def expand_notes(abc):
     """
     Expand notes, so that E2 becomes EE et.c.
+
+    :param abc: string of abc to expand
+    :returns: string of expanded abc
     """
 
     ret = []
@@ -298,6 +394,9 @@ def expand_parts(abc):
     and therefore have not implemented support for it here. In Henrik
     Norbeck's tune collection (May 2015), there was not a single one of the
     2312 tunes that contained a third ending. Enough said.
+
+    :param abc: string of abc to expand
+    :returns: string of expanded abc
     """
     parsed_abc = abc
     start = 0
@@ -355,7 +454,12 @@ def expand_parts(abc):
 
 
 def strip_chords(abc):
-    """Strip chords and 'guitar chords' from string."""
+    """Strip chords and 'guitar chords' from string.
+
+    :param abc: string of abc to filter
+    :returns: string of abc with chords stripped
+
+    """
     ret = []
     in_chord = False
 
@@ -373,6 +477,12 @@ def strip_chords(abc):
 
 
 def strip_extra_chars(abc):
+    """Strip misc extra chars (/\<>)
+
+    :param abc: string of abc to filter
+    :returns: string of filtered abc
+
+    """
     for rep in '/\\<>':
         abc = abc.replace(rep, '')
     return abc
@@ -384,6 +494,14 @@ def expand_abc(abc):
 
     This runs all the stripping and expanding functions on the input string,
     and also makes it lowercase.
+
+    :param abc: string of abc to expand
+    :returns: string of expanded abc
+
+    .. seealso:: strip_octave, strip_accidentals, strip_triplets, strip_chords
+    .. seealso:: strip_ornaments, expand_notes, expand_parts, strip_whitespace
+    .. seealso:: strip_bar_dividers, strip_extra_chars
+
     """
     ret = strip_octave(abc)
     ret = strip_accidentals(ret)
@@ -397,8 +515,3 @@ def expand_abc(abc):
     ret = strip_extra_chars(ret)
     ret = ret.lower()
     return ret
-
-
-if __name__ == "__main__":
-    for tune in parse_file('test.abc'):
-        print(tune)
