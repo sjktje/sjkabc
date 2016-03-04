@@ -204,13 +204,9 @@ def strip_whitespace(abc):
 
 def strip_accidentals(abc):
     """Remove accidentals from string."""
-    ret = []
-
-    for c in abc:
-        if c != '=' and c != '^' and c != '_':
-            ret.append(c)
-
-    return ''.join(ret)
+    for rep in '=^_':
+        abc = abc.replace(rep, '')
+    return abc
 
 
 def strip_octave(abc):
