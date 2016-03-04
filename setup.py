@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from distutils.core import setup
+from setuptools import setup
+import sjkabc
 
 setup(name='sjkabc',
-      version='1.0.0a0',
+      version=sjkabc.__version__,
       description='ABC music notation parser',
       author='Svante Kvarnström',
       author_email='sjk@sjk.io',

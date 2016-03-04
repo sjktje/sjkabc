@@ -5,7 +5,6 @@ Module for parsing ABC music notation.
 """
 import os
 
-__version__ = '1.1.0'
 
 HEADER_KEYS = dict(
     A='area',
