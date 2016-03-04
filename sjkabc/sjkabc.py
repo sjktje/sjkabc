@@ -1,7 +1,13 @@
 #!/usr/bin/env python
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 """
-Module for parsing ABC music notation.
+    sjkabc.sjkabc
+    ~~~~~~~~~~~~~
+
+    This module provides functionality for parsing ABC music notation.
+
+    :copyright: (c) 2016 by Svante Kvarnström
+    :license: BSD, see LICENSE for more details.
 """
 import os
 
