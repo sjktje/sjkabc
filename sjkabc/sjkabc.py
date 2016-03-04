@@ -199,34 +199,21 @@ def strip_ornaments(abc):
 
 def strip_whitespace(abc):
     """Remove whitespace and newlines from string."""
-    ret = []
-    for c in abc:
-        if c in [' ', '\n', '\r']:
-            continue
-        ret.append(c)
-    return ''.join(ret)
+    return ''.join(abc.split())
 
 
 def strip_accidentals(abc):
     """Remove accidentals from string."""
-    ret = []
-
-    for c in abc:
-        if c != '=' and c != '^' and c != '_':
-            ret.append(c)
-
-    return ''.join(ret)
+    for rep in '=^_':
+        abc = abc.replace(rep, '')
+    return abc
 
 
 def strip_octave(abc):
     """Remove octave specifiers from string."""
-    ret = []
-
-    for c in abc:
-        if c != ',' and c != '\'':
-            ret.append(c)
-
-    return ''.join(ret)
+    for rep in ',\'':
+        abc = abc.replace(rep, '')
+    return abc
 
 
 def strip_bar_dividers(abc):
@@ -386,12 +373,9 @@ def strip_chords(abc):
 
 
 def strip_extra_chars(abc):
-    ret = []
-    for c in abc:
-        if c in ['/', '\\', '<', '>']:
-            continue
-        ret.append(c)
-    return ''.join(ret)
+    for rep in '/\\<>':
+        abc = abc.replace(rep, '')
+    return abc
 
 
 def expand_abc(abc):
