@@ -2,11 +2,11 @@
 # encoding: utf-8
 
 import unittest
-from sjkabc import strip_ornaments, strip_whitespace, strip_accidentals
-from sjkabc import strip_octave, strip_bar_dividers, expand_notes
-from sjkabc import expand_parts, strip_triplets, strip_chords
-from sjkabc import strip_extra_chars, expand_abc
-from sjkabc import Tune, HEADER_KEYS, Parser
+from sjkabc.sjkabc import strip_ornaments, strip_whitespace, strip_accidentals
+from sjkabc.sjkabc import strip_octave, strip_bar_dividers, expand_notes
+from sjkabc.sjkabc import expand_parts, strip_triplets, strip_chords
+from sjkabc.sjkabc import strip_extra_chars, expand_abc, HEADER_KEYS
+from sjkabc import Tune, Parser
 
 
 class ABCManipulationTestCase(unittest.TestCase):
