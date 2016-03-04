@@ -191,6 +191,10 @@ class ABCManipulationTestCase(unittest.TestCase):
         for attr in ['abc', 'expanded_abc']:
             self.assertEqual(getattr(tune, attr), [])
 
+    def test_setting_tune_abc_sets_expanded_abc(self):
+        t = Tune()
+        t.abc = '|:abc bcd|bcd bcd:|'
+        self.assertEqual(t.expanded_abc, 'abcbcdbcdbcdabcbcdbcdbcd')
 
 if __name__ == '__main__':
     unittest.main()
