@@ -199,12 +199,7 @@ def strip_ornaments(abc):
 
 def strip_whitespace(abc):
     """Remove whitespace and newlines from string."""
-    ret = []
-    for c in abc:
-        if c in [' ', '\n', '\r']:
-            continue
-        ret.append(c)
-    return ''.join(ret)
+    return ''.join(abc.split())
 
 
 def strip_accidentals(abc):
