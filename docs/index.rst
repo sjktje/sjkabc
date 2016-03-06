@@ -6,19 +6,21 @@
 Welcome to sjkabc's documentation!
 ==================================
 
+sjkabc is a Python 3 library that provides ABC music notation parsing functionality.
+
+Thanks to
+---------
+
+* `Dr Bryan Duggan`_ - for his thesis on 'Machine annotation of traditional Irish dance music' and for creating `Tunepal`_
+* `Peter van Dijk`_ - for help and advice on Python related issues
+
+.. _Dr Bryan Duggan: http://bryanduggan.org
+.. _Peter van Dijk: http://7bits.nl
+.. _Tunepal: http://tunepal.org
+
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
    sjkabc
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
