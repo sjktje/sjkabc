@@ -86,10 +86,10 @@ class Parser:
 
     :Example:
 
-        for tune in Parser(abc):
-            print('Parsed ', tune.title)
+        >>> for tune in Parser(abc):
+        ...     print('Parsed ', tune.title)
 
-    .. seealso:: Tune
+    .. seealso:: :py:class:`Tune`
     """
 
     def __init__(self, abc):
