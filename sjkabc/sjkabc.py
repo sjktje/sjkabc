@@ -385,14 +385,6 @@ def expand_parts(abc):
     """
     Expand repeats with support for (two) alternate endings.
 
-    In other words:
-
-        |:aaa|bbb|1ccc|ddd:|2eee|fff||
-
-    becomes:
-
-        aaa|bbb|ccc|ddd|aaa|bbb|eee|fff
-
     An alternate ending may contain a maximum of two bars, as per ABC
     standard. There may be a maximum of two alternative endings. Although one
     could do more than two endings in ABC, using P:parts, I hardly ever see it
