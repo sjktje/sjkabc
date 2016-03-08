@@ -44,7 +44,7 @@ class Tune:
     """
     This class represents a parsed tune.
 
-    Its attributes are generated from `HEADER_KEYS`, with the addition of
+    Its attributes are generated from :py:const:`HEADER_KEYS`, with the addition of
     `abc` and `expanded_abc`. The expanded_abc attribute is automatically
     populated.
 
@@ -56,7 +56,7 @@ class Tune:
         >>> t.expanded_abc
         'abcabcabcabc'
 
-    .. seealso:: `HEADER_KEYS`, :py:class:`Parser`, :py:func:`expand_abc`
+    .. seealso:: :py:const:`HEADER_KEYS`, :py:class:`Parser`, :py:func:`expand_abc`
     """
 
     def __init__(self):
