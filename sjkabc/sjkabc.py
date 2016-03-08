@@ -51,7 +51,7 @@ class Tune:
         >>> t.expanded_abc
         'abcabcabcabc'
 
-    .. seealso:: `HEADER_KEYS`, `Parser`, `Parser.expand_abc`
+    .. seealso:: `HEADER_KEYS`, :py:class:`Parser`, :py:func:`expand_abc`
     """
 
     def __init__(self):
@@ -218,7 +218,7 @@ def parse_file(filename):
     :param filename: Name of file to parse
     :returns: `Tune` object for every found tune.
 
-    .. seealso:: parse_dir, Parser, Tune
+    .. seealso:: :py:func:`parse_dir`, :py:class:`Parser`, :py:class:`Tune`
     """
     with open(filename, 'r') as f:
         abc = f.read()
@@ -233,7 +233,7 @@ def parse_dir(dir):
     :param dir: Directory of abc files
     :returns: `Tune` object for every found file
 
-    .. seealso:: parse_file, Parser, Tune
+    .. seealso:: :py:func:`parse_file`, :py:class:`Parser`, :py:class:`Tune`
 
     """
     for dirpath, dirnames, filenames in os.walk(dir):
@@ -498,9 +498,9 @@ def expand_abc(abc):
     :param abc: string of abc to expand
     :returns: string of expanded abc
 
-    .. seealso:: strip_octave, strip_accidentals, strip_triplets, strip_chords
-    .. seealso:: strip_ornaments, expand_notes, expand_parts, strip_whitespace
-    .. seealso:: strip_bar_dividers, strip_extra_chars
+    .. seealso:: :py:func:`strip_octave`, :py:func:`strip_accidentals`, :py:func:`strip_triplets`, :py:func:`strip_chords`
+                 :py:func:`strip_ornaments`, :py:func:`expand_notes`, :py:func:`expand_parts`, :py:func:`strip_whitespace`
+                 :py:func:`strip_bar_dividers`, :py:func:`strip_extra_chars`
 
     """
     ret = strip_octave(abc)
