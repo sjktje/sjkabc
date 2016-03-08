@@ -498,8 +498,10 @@ def expand_abc(abc):
     :param abc: string of abc to expand
     :returns: string of expanded abc
 
-    .. seealso:: :py:func:`strip_octave`, :py:func:`strip_accidentals`, :py:func:`strip_triplets`, :py:func:`strip_chords`
-                 :py:func:`strip_ornaments`, :py:func:`expand_notes`, :py:func:`expand_parts`, :py:func:`strip_whitespace`
+    .. seealso:: :py:func:`strip_octave`, :py:func:`strip_accidentals`,
+                 :py:func:`strip_triplets`, :py:func:`strip_chords`
+                 :py:func:`strip_ornaments`, :py:func:`expand_notes`,
+                 :py:func:`expand_parts`, :py:func:`strip_whitespace`
                  :py:func:`strip_bar_dividers`, :py:func:`strip_extra_chars`
 
     """
