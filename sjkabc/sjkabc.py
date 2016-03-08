@@ -310,13 +310,7 @@ def strip_bar_dividers(abc):
     Strip bar dividers from string
 
     This function can safely be run before expand_parts, as it won't remove
-    repeats, e.g.:
-
-    ABCD ABCD|ABCD abcd:|bcde BCDE|]
-
-    becomes
-
-    ABCD ABCDABCD abcd:|bcde BCDE
+    repeats.
 
     :param abc: string of abc to filter
     :returns: string of abc without bar dividers
