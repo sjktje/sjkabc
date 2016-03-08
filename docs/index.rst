@@ -24,4 +24,5 @@ Contents:
    :maxdepth: 2
 
    tutorial
+   limitations
    sjkabc
