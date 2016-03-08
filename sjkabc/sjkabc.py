@@ -8,6 +8,11 @@
 
     :copyright: (c) 2016 by Svante Kvarnström
     :license: BSD, see LICENSE for more details.
+
+    .. py:data:: HEADER_KEYS
+
+        Supported ABC notation header keys. This `dict` is used to populate the
+        attributes of :py:class:`Tune`.
 """
 import os
 
