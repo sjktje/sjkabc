@@ -8,6 +8,11 @@
 
     :copyright: (c) 2016 by Svante Kvarnström
     :license: BSD, see LICENSE for more details.
+
+    .. py:data:: HEADER_KEYS
+
+        Supported ABC notation header keys. This `dict` is used to populate the
+        attributes of :py:class:`Tune`.
 """
 import os
 
@@ -39,9 +44,8 @@ class Tune:
     """
     This class represents a parsed tune.
 
-    Its attributes are generated from `HEADER_KEYS`, with the addition of
-    `abc` and `expanded_abc`. The expanded_abc attribute is automatically
-    populated.
+    Its attributes are generated from :py:const:`HEADER_KEYS`, with the addition of
+    :py:meth:`abc` and :py:attr:`expanded_abc`.
 
     :Example:
 
@@ -51,7 +55,7 @@ class Tune:
         >>> t.expanded_abc
         'abcabcabcabc'
 
-    .. seealso:: `HEADER_KEYS`, `Parser`, `Parser.expand_abc`
+    .. seealso:: :py:const:`HEADER_KEYS`, :py:class:`Parser`
     """
 
     def __init__(self):
@@ -64,6 +68,17 @@ class Tune:
 
     @property
     def abc(self):
+        """Set and get abc property
+
+        Getter/setter for Tune.abc. When set, the attribute `expanded_abc` will
+        automatically be set to the expanded ABC.
+
+        :param str abc: abc to set
+        :returns: abc
+
+        .. seealso:: :py:func:`expand_abc`
+
+        """
         return self._abc
 
     @abc.setter
@@ -86,10 +101,10 @@ class Parser:
 
     :Example:
 
-    for tune in Parser(abc):
-        print('Parsed ', tune.title)
+        >>> for tune in Parser(abc):
+        ...     print('Parsed ', tune.title)
 
-    .. seealso:: Tune
+    .. seealso:: :py:class:`Tune`
     """
 
     def __init__(self, abc):
@@ -218,7 +233,7 @@ def parse_file(filename):
     :param filename: Name of file to parse
     :returns: `Tune` object for every found tune.
 
-    .. seealso:: parse_dir, Parser, Tune
+    .. seealso:: :py:func:`parse_dir`, :py:class:`Parser`, :py:class:`Tune`
     """
     with open(filename, 'r') as f:
         abc = f.read()
@@ -233,7 +248,7 @@ def parse_dir(dir):
     :param dir: Directory of abc files
     :returns: `Tune` object for every found file
 
-    .. seealso:: parse_file, Parser, Tune
+    .. seealso:: :py:func:`parse_file`, :py:class:`Parser`, :py:class:`Tune`
 
     """
     for dirpath, dirnames, filenames in os.walk(dir):
@@ -305,13 +320,7 @@ def strip_bar_dividers(abc):
     Strip bar dividers from string
 
     This function can safely be run before expand_parts, as it won't remove
-    repeats, e.g.:
-
-    ABCD ABCD|ABCD abcd:|bcde BCDE|]
-
-    becomes
-
-    ABCD ABCDABCD abcd:|bcde BCDE
+    repeats.
 
     :param abc: string of abc to filter
     :returns: string of abc without bar dividers
@@ -379,14 +388,6 @@ def expand_notes(abc):
 def expand_parts(abc):
     """
     Expand repeats with support for (two) alternate endings.
-
-    In other words:
-
-        |:aaa|bbb|1ccc|ddd:|2eee|fff||
-
-    becomes:
-
-        aaa|bbb|ccc|ddd|aaa|bbb|eee|fff
 
     An alternate ending may contain a maximum of two bars, as per ABC
     standard. There may be a maximum of two alternative endings. Although one
@@ -498,9 +499,11 @@ def expand_abc(abc):
     :param abc: string of abc to expand
     :returns: string of expanded abc
 
-    .. seealso:: strip_octave, strip_accidentals, strip_triplets, strip_chords
-    .. seealso:: strip_ornaments, expand_notes, expand_parts, strip_whitespace
-    .. seealso:: strip_bar_dividers, strip_extra_chars
+    .. seealso:: :py:func:`strip_octave`, :py:func:`strip_accidentals`,
+                 :py:func:`strip_triplets`, :py:func:`strip_chords`
+                 :py:func:`strip_ornaments`, :py:func:`expand_notes`,
+                 :py:func:`expand_parts`, :py:func:`strip_whitespace`
+                 :py:func:`strip_bar_dividers`, :py:func:`strip_extra_chars`
 
     """
     ret = strip_octave(abc)
