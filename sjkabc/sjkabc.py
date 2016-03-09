@@ -347,8 +347,16 @@ def strip_bar_dividers(abc):
     This function can safely be run before expand_parts, as it won't remove
     repeats.
 
-    :param abc: string of abc to filter
-    :returns: string of abc without bar dividers
+    Example::
+
+        >>> from sjkabc import strip_bar_dividers
+        >>> stripped = strip_bar_dividers('abcd bcde|bcde abcd|defg abcd|bebe baba')
+        >>> stripped
+        'abcd bcdebcde abcddefg abcdbebe baba'
+
+    :param str abc: abc to filter
+    :returns: abc without bar dividers
+    :rtype: str
 
     """
     ret = []
