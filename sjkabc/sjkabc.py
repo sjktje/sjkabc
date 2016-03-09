@@ -47,7 +47,7 @@ class Tune:
     Its attributes are generated from :py:const:`HEADER_KEYS`, with the addition of
     :py:meth:`abc` and :py:attr:`expanded_abc`.
 
-    :Example:
+    Example::
 
         >>> t = Tune()
         >>> t.title = 'Example tune'
@@ -99,7 +99,7 @@ class Parser:
     notation. This class is iterable and will return a `Tune` object
     for every tune found in the provided ABC notation.
 
-    :Example:
+    Example::
 
         >>> for tune in Parser(abc):
         ...     print('Parsed ', tune.title)
@@ -171,8 +171,9 @@ class Parser:
     def _line_is_key(self, line):
         """Check if line is a K: line
 
-        :param line: line to check
+        :param str line: line to check
         :returns: True if line is a key line and False if not.
+        :rtype: bool
 
         """
         if line.startswith('K:'):
@@ -183,8 +184,9 @@ class Parser:
     def _line_empty(self, line):
         """Check if line is empty
 
-        :param line: line to check
+        :param str line: line to check
         :returns: True if line is empty and False if not.
+        :rtype: bool
 
         """
         line = line.strip()
@@ -196,8 +198,9 @@ class Parser:
     def _line_comment(self, line):
         """Check if line is a comment
 
-        :param line: line to check
+        :param str line: line to check
         :returns: True if line is a comment and False if not.
+        :rtype: bool
 
         """
         line = line.strip()
@@ -210,8 +213,10 @@ class Parser:
         """Check if line is an index line (X:).
 
         If it is, it is considered to be the start of a tune.
-        :param line: line to check
+
+        :param str line: line to check
         :returns: True if line is a index line, False if not.
+        :rtype: bool
 
         """
         if line.startswith('X:'):
@@ -231,7 +236,8 @@ def parse_file(filename):
         ...    print(tune.title)
 
     :param filename: Name of file to parse
-    :returns: `Tune` object for every found tune.
+    :returns: :class:`Tune` object for every found tune.
+    :rtype: :class:`Tune`
 
     .. seealso:: :py:func:`parse_dir`, :py:class:`Parser`, :py:class:`Tune`
     """
@@ -247,6 +253,7 @@ def parse_dir(dir):
 
     :param dir: Directory of abc files
     :returns: :class:`Tune` object for every found file
+    :rtype: :class:`Tune`
 
     .. seealso:: :py:func:`parse_file`, :py:class:`Parser`, :py:class:`Tune`
 
@@ -260,8 +267,16 @@ def parse_dir(dir):
 def strip_ornaments(abc):
     """Remove gracenotes, tildes, trills, turns and fermatas from string.
 
-    :param abc: abc to filter
-    :returns: string of filtered abc
+    Example::
+
+        >>> from sjkabc import strip_ornaments
+        >>> stripped = strip_ornaments('abc bcd|~c3 def|{/def}efg !trill(!abc|')
+        >>> stripped
+        'abc bcd|c3 def|efg abc|'
+
+    :param str abc: abc to filter
+    :returns: filtered abc
+    :rtype: str
 
     """
 
@@ -285,17 +300,26 @@ def strip_ornaments(abc):
 def strip_whitespace(abc):
     """Remove whitespace and newlines from string.
 
-    :param abc: string of abc to filter
-    :returns: string of abc with whitespace removed
+    :param str abc: abc to filter
+    :returns: abc with whitespace removed
+    :rtype: str
     """
     return ''.join(abc.split())
 
 
 def strip_accidentals(abc):
-    """Remove accidentals (=, ^, _) from string.
+    """Remove accidentals from string.
 
-    :param abc: string of abc to filter
-    :returns: string of abc with accidentals removed
+    Example::
+
+        >>> from sjkabc import strip_accidentals
+        >>> stripped = strip_whitespace('abc ^c=de|_e^fg _g=fe')
+        >>> stripped
+        'abc cde|efg gfe'
+
+    :param str abc: abc to filter
+    :returns: abc with accidentals removed
+    :rtype: str
 
     """
     for rep in '=^_':
@@ -306,8 +330,16 @@ def strip_accidentals(abc):
 def strip_octave(abc):
     """Remove octave specifiers from string.
 
-    :param abc: string of abc to filter
-    :returns: string of abc with octave specifiers removed
+    Example::
+
+        >>> from sjkabc import strip_octave
+        >>> stripped = strip_octave("A,B,C,d'e'f'")
+        >>> stripped
+        'ABCdef'
+
+    :param str abc: abc to filter
+    :returns: abc with octave specifiers removed
+    :rtype: str
 
     """
     for rep in ',\'':
@@ -322,8 +354,16 @@ def strip_bar_dividers(abc):
     This function can safely be run before expand_parts, as it won't remove
     repeats.
 
-    :param abc: string of abc to filter
-    :returns: string of abc without bar dividers
+    Example::
+
+        >>> from sjkabc import strip_bar_dividers
+        >>> stripped = strip_bar_dividers('abcd bcde|bcde abcd|defg abcd|bebe baba')
+        >>> stripped
+        'abcd bcdebcde abcddefg abcdbebe baba'
+
+    :param str abc: abc to filter
+    :returns: abc without bar dividers
+    :rtype: str
 
     """
     ret = []
@@ -345,8 +385,16 @@ def strip_triplets(abc):
     Please note that this simply removes the (n and leaves the following
     notes.
 
-    :param abc: string of abc to filter
-    :returns: string of abc without triplets
+    Example::
+
+        >>> from sjkabc import strip_triplets
+        >>> stripped = strip_triplets('AB(3cBA Bcde|fd(3ddd (4efed (4BdBF')
+        >>> stripped
+        'ABcBA Bcde|fdddd efed BdBF'
+
+    :param str abc: abc to filter
+    :returns: abc without triplets
+    :rtype: str
 
     """
 
@@ -368,8 +416,9 @@ def expand_notes(abc):
     """
     Expand notes, so that E2 becomes EE et.c.
 
-    :param abc: string of abc to expand
-    :returns: string of expanded abc
+    :param str abc: abc to expand
+    :returns: expanded abc
+    :rtype: str
     """
 
     ret = []
@@ -396,8 +445,10 @@ def expand_parts(abc):
     Norbeck's tune collection (May 2015), there was not a single one of the
     2312 tunes that contained a third ending. Enough said.
 
-    :param abc: string of abc to expand
-    :returns: string of expanded abc
+    :param str abc: abc to expand
+    :returns: expanded abc
+    :rtype: str
+
     """
     parsed_abc = abc
     start = 0
@@ -457,8 +508,16 @@ def expand_parts(abc):
 def strip_chords(abc):
     """Strip chords and 'guitar chords' from string.
 
-    :param abc: string of abc to filter
-    :returns: string of abc with chords stripped
+    Example::
+
+        >>> from sjkabc import strip_chords
+        >>> stripped = strip_chords('"G" abc|"Em" bcd|[GBd] cde')
+        >>> stripped
+        ' abc| bcd | cde'
+
+    :param str abc: abc to filter
+    :returns: abc with chords stripped
+    :rtype: str
 
     """
     ret = []
@@ -480,8 +539,9 @@ def strip_chords(abc):
 def strip_extra_chars(abc):
     """Strip misc extra chars (/\<>)
 
-    :param abc: string of abc to filter
-    :returns: string of filtered abc
+    :param str abc: abc to filter
+    :returns: filtered abc
+    :rtype: str
 
     """
     for rep in '/\\<>':
@@ -496,8 +556,9 @@ def expand_abc(abc):
     This runs all the stripping and expanding functions on the input string,
     and also makes it lowercase.
 
-    :param abc: string of abc to expand
+    :param str abc: string of abc to expand
     :returns: string of expanded abc
+    :rtype: str
 
     .. seealso:: :py:func:`strip_octave`, :py:func:`strip_accidentals`,
                  :py:func:`strip_triplets`, :py:func:`strip_chords`
