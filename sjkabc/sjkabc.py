@@ -529,8 +529,9 @@ def strip_chords(abc):
 def strip_extra_chars(abc):
     """Strip misc extra chars (/\<>)
 
-    :param abc: string of abc to filter
-    :returns: string of filtered abc
+    :param str abc: abc to filter
+    :returns: filtered abc
+    :rtype: str
 
     """
     for rep in '/\\<>':
