@@ -445,8 +445,10 @@ def expand_parts(abc):
     Norbeck's tune collection (May 2015), there was not a single one of the
     2312 tunes that contained a third ending. Enough said.
 
-    :param abc: string of abc to expand
-    :returns: string of expanded abc
+    :param str abc: abc to expand
+    :returns: expanded abc
+    :rtype: str
+
     """
     parsed_abc = abc
     start = 0
