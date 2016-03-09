@@ -439,12 +439,10 @@ def expand_parts(abc):
     """
     Expand repeats with support for (two) alternate endings.
 
-    An alternate ending may contain a maximum of two bars, as per ABC
-    standard. There may be a maximum of two alternative endings. Although one
-    could do more than two endings in ABC, using P:parts, I hardly ever see it
-    and therefore have not implemented support for it here. In Henrik
-    Norbeck's tune collection (May 2015), there was not a single one of the
-    2312 tunes that contained a third ending. Enough said.
+    Example::
+
+        >>> print(expand_parts('aaa|bbb|1ccc:|2ddd|]'))
+        aaa|bbb|ccc|aaa|bbb|ddd|
 
     :param str abc: abc to expand
     :returns: expanded abc
