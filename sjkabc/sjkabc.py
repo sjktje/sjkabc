@@ -90,6 +90,9 @@ class Tune:
     def __str__(self):
         return self.title[0]
 
+    def format_abc(self):
+        pass
+
 
 class Parser:
 
