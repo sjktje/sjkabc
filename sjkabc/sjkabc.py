@@ -378,8 +378,16 @@ def strip_triplets(abc):
     Please note that this simply removes the (n and leaves the following
     notes.
 
-    :param abc: string of abc to filter
-    :returns: string of abc without triplets
+    Example::
+
+        >>> from sjkabc import strip_triplets
+        >>> stripped = strip_triplets('AB(3cBA Bcde|fd(3ddd (4efed (4BdBF')
+        >>> stripped
+        'ABcBA Bcde|fdddd efed BdBF'
+
+    :param str abc: abc to filter
+    :returns: abc without triplets
+    :rtype: str
 
     """
 
