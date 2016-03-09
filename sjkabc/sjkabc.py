@@ -171,8 +171,9 @@ class Parser:
     def _line_is_key(self, line):
         """Check if line is a K: line
 
-        :param line: line to check
+        :param str line: line to check
         :returns: True if line is a key line and False if not.
+        :rtype: bool
 
         """
         if line.startswith('K:'):
@@ -183,8 +184,9 @@ class Parser:
     def _line_empty(self, line):
         """Check if line is empty
 
-        :param line: line to check
+        :param str line: line to check
         :returns: True if line is empty and False if not.
+        :rtype: bool
 
         """
         line = line.strip()
@@ -196,8 +198,9 @@ class Parser:
     def _line_comment(self, line):
         """Check if line is a comment
 
-        :param line: line to check
+        :param str line: line to check
         :returns: True if line is a comment and False if not.
+        :rtype: bool
 
         """
         line = line.strip()
@@ -210,8 +213,10 @@ class Parser:
         """Check if line is an index line (X:).
 
         If it is, it is considered to be the start of a tune.
-        :param line: line to check
+
+        :param str line: line to check
         :returns: True if line is a index line, False if not.
+        :rtype: bool
 
         """
         if line.startswith('X:'):
