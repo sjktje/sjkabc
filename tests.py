@@ -196,6 +196,15 @@ class ABCManipulationTestCase(unittest.TestCase):
         t.abc = '|:abc bcd|bcd bcd:|'
         self.assertEqual(t.expanded_abc, 'abcbcdbcdbcdabcbcdbcdbcd')
 
+    def test_parser_detects_comment(self):
+        p = Parser('blah')
+        self.assertTrue(p._line_comment('% This is a test'))
+
+    def test_tune_object_returns_title_string_representation(self):
+        t = Tune()
+        t.title.append('Test')
+        self.assertEqual(str(t), 'Test')
+
 
 class TestHeaderParsing(unittest.TestCase):
 
