@@ -416,8 +416,9 @@ def expand_notes(abc):
     """
     Expand notes, so that E2 becomes EE et.c.
 
-    :param abc: string of abc to expand
-    :returns: string of expanded abc
+    :param str abc: abc to expand
+    :returns: expanded abc
+    :rtype: str
     """
 
     ret = []
