@@ -323,8 +323,16 @@ def strip_accidentals(abc):
 def strip_octave(abc):
     """Remove octave specifiers from string.
 
-    :param abc: string of abc to filter
-    :returns: string of abc with octave specifiers removed
+    Example::
+
+        >>> from sjkabc import strip_octave
+        >>> stripped = strip_octave("A,B,C,d'e'f'")
+        >>> stripped
+        'ABCdef'
+
+    :param str abc: abc to filter
+    :returns: abc with octave specifiers removed
+    :rtype: str
 
     """
     for rep in ',\'':
