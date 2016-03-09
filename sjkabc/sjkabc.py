@@ -253,6 +253,7 @@ def parse_dir(dir):
 
     :param dir: Directory of abc files
     :returns: :class:`Tune` object for every found file
+    :rtype: :class:`Tune`
 
     .. seealso:: :py:func:`parse_file`, :py:class:`Parser`, :py:class:`Tune`
 
