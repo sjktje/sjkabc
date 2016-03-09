@@ -1,10 +1,14 @@
 # Change Log
 
-## [Unreleased]
+## Unreleased
 
 ### Added
 
 * Support for P: (parts)
+
+### Fixed
+
+* Travis-CI
 
 ## 1.1.0 - 2016-03-08
 
@@ -19,5 +23,3 @@
 * Some minor refactoring of code
 
 ### Fixed
-
-[Unreleased]: https://github.com/sjktje/sjkabc/compare/v1.1.0...HEAD
