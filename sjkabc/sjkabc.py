@@ -30,6 +30,7 @@ HEADER_KEYS = dict(
     M='metre',
     N='notes',
     O='origin',
+    P='parts',
     Q='tempo',
     R='rhythm',
     S='source',
