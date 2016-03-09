@@ -61,11 +61,26 @@ Start a new feature branch for whatever you are hacking on:
 
 .. code-block:: console
 
-    $ git flow feature start implement_parts
+    $ git flow feature start your_feature
 
 Hack away and commit changes just as usual. When done, publish your release
 and ask for comments on the `issue tracker`_.
 
+.. code-block:: console
+
+    $ git flow feature publish your_feature
+
+Now open a pull request for your published branch, discuss your changes and
+apply changes. Eventually your change will be merged with the main development
+tree.
+
+.. important::
+
+    Proposed changes should include suitable tests and modifications to the
+    documentation, if appropriate.
+
+Once your changes have been merged you can delete your feature branch and pull
+from the main source tree, or simply merge it in yourself.
 
 .. _GitHub: https://github.com/sjktje/sjkabc
 .. _git: https://git-scm.com
