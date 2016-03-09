@@ -260,8 +260,16 @@ def parse_dir(dir):
 def strip_ornaments(abc):
     """Remove gracenotes, tildes, trills, turns and fermatas from string.
 
-    :param abc: abc to filter
-    :returns: string of filtered abc
+    Example::
+
+        >>> from sjkabc import strip_ornaments
+        >>> stripped = strip_ornaments('abc bcd|~c3 def|{/def}efg !trill(!abc|')
+        >>> stripped
+        'abc bcd|c3 def|efg abc|'
+
+    :param str abc: abc to filter
+    :returns: filtered abc
+    :rtype: str
 
     """
 
