@@ -236,7 +236,8 @@ def parse_file(filename):
         ...    print(tune.title)
 
     :param filename: Name of file to parse
-    :returns: `Tune` object for every found tune.
+    :returns: :class:`Tune` object for every found tune.
+    :rtype: :class:`Tune`
 
     .. seealso:: :py:func:`parse_dir`, :py:class:`Parser`, :py:class:`Tune`
     """
