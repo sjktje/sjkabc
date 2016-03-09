@@ -498,8 +498,16 @@ def expand_parts(abc):
 def strip_chords(abc):
     """Strip chords and 'guitar chords' from string.
 
-    :param abc: string of abc to filter
-    :returns: string of abc with chords stripped
+    Example::
+
+        >>> from sjkabc import strip_chords
+        >>> stripped = strip_chords('"G" abc|"Em" bcd|[GBd] cde')
+        >>> stripped
+        ' abc| bcd | cde'
+
+    :param str abc: abc to filter
+    :returns: abc with chords stripped
+    :rtype: str
 
     """
     ret = []
