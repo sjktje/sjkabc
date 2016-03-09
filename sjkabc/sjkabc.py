@@ -556,8 +556,9 @@ def expand_abc(abc):
     This runs all the stripping and expanding functions on the input string,
     and also makes it lowercase.
 
-    :param abc: string of abc to expand
+    :param str abc: string of abc to expand
     :returns: string of expanded abc
+    :rtype: str
 
     .. seealso:: :py:func:`strip_octave`, :py:func:`strip_accidentals`,
                  :py:func:`strip_triplets`, :py:func:`strip_chords`
