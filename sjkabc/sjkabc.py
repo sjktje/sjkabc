@@ -243,10 +243,10 @@ def parse_file(filename):
 
 
 def parse_dir(dir):
-    """Run `Parser` on every file with .abc extension in `dir`
+    """Run :class:`Parser` on every file with .abc extension in `dir`
 
     :param dir: Directory of abc files
-    :returns: `Tune` object for every found file
+    :returns: :class:`Tune` object for every found file
 
     .. seealso:: :py:func:`parse_file`, :py:class:`Parser`, :py:class:`Tune`
 
