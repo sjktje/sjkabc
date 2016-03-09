@@ -293,17 +293,26 @@ def strip_ornaments(abc):
 def strip_whitespace(abc):
     """Remove whitespace and newlines from string.
 
-    :param abc: string of abc to filter
-    :returns: string of abc with whitespace removed
+    :param str abc: abc to filter
+    :returns: abc with whitespace removed
+    :rtype: str
     """
     return ''.join(abc.split())
 
 
 def strip_accidentals(abc):
-    """Remove accidentals (=, ^, _) from string.
+    """Remove accidentals from string.
 
-    :param abc: string of abc to filter
-    :returns: string of abc with accidentals removed
+    Example::
+
+        >>> from sjkabc import strip_accidentals
+        >>> stripped = strip_whitespace('abc ^c=de|_e^fg _g=fe')
+        >>> stripped
+        'abc cde|efg gfe'
+
+    :param str abc: abc to filter
+    :returns: abc with accidentals removed
+    :rtype: str
 
     """
     for rep in '=^_':
