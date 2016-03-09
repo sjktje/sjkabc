@@ -99,7 +99,7 @@ class Parser:
     notation. This class is iterable and will return a `Tune` object
     for every tune found in the provided ABC notation.
 
-    :Example:
+    Example::
 
         >>> for tune in Parser(abc):
         ...     print('Parsed ', tune.title)
