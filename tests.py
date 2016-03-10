@@ -211,6 +211,65 @@ class ABCManipulationTestCase(unittest.TestCase):
         self.assertEqual(field, 'title')
 
 
+class TestTune(unittest.TestCase):
+
+    """Test case docstring."""
+
+    def setUp(self):
+        self.t = Tune()
+        self.t.book.append('The Bible')
+        self.t.composer.append('John Doe')
+        self.t.discography.append('Best hits')
+        self.t.group.append('Test')
+        self.t.history.append('Interesting')
+        self.t.instruction.append('Some instructions')
+        self.t.key.append('Gm')
+        self.t.note_length.append('1/8')
+        self.t.metre.append('4/4')
+        self.t.notes.append('A note')
+        self.t.origin.append('Sweden')
+        self.t.parts.append('AABB')
+        self.t.tempo.append('108')
+        self.t.rhythm.append('reel')
+        self.t.source.append('John Smith')
+        self.t.title.append('Test title')
+        self.t.title.append('Second test title')
+        self.t.index.append('1')
+        self.t.transcription.append('Doctor Who')
+        self.t.abc.append('|:aaa|bbb|ccc:|')
+
+    def test_get_header_line(self):
+        titles = list()
+        for title in self.t._get_header_line('title'):
+            titles.append(title)
+
+        self.assertEqual(titles, ['T:Test title', 'T:Second test title'])
+
+    def test_format_abc_returns_header_lines_in_correct_order(self):
+        correct = """X:1
+T:Test title
+T:Second test title
+C:John Doe
+O:Sweden
+R:reel
+B:The Bible
+D:Best hits
+G:Test
+H:Interesting
+N:A note
+S:John Smith
+Z:Doctor Who
+P:AABB
+M:4/4
+L:1/8
+Q:108
+K:Gm
+|:aaa|bbb|ccc:|
+
+"""
+        self.assertEqual(correct, self.t.format_abc())
+
+
 class TestHeaderParsing(unittest.TestCase):
 
     """Test case docstring."""
