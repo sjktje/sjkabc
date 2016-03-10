@@ -1,4 +1,7 @@
 language: python
+python:
+    - "3.4"
+    - "3.5"
 script: "./tests.py"
 install: true
 after_success:

@@ -18,10 +18,10 @@ import os
 
 
 HEADER_KEYS = dict(
-    A='area',
     B='book',
     C='composer',
     D='discography',
+    F='file',
     G='group',
     H='history',
     I='instruction',
@@ -30,6 +30,7 @@ HEADER_KEYS = dict(
     M='metre',
     N='notes',
     O='origin',
+    P='parts',
     Q='tempo',
     R='rhythm',
     S='source',
@@ -38,14 +39,93 @@ HEADER_KEYS = dict(
     Z='transcription'
 )
 
+#: List of decoration symbols according to the ABC notation standard v2.1.
+DECORATIONS = [
+    '!trill!',
+    '!trill(!',
+    '!trill)!',
+    '!lowermordent!',
+    '!uppermordent!',
+    '!mordent!',
+    '!pralltriller!',
+    '!roll!',
+    '!turn!',
+    '!turnx!',
+    '!invertedturn!',
+    '!invertedturnx!',
+    '!arpeggio!',
+    '!>!',
+    '!accent!',
+    '!emphasis!',
+    '!fermata!',
+    '!invertedfermata!',
+    '!tenuto!',
+    '!0!',
+    '!1!',
+    '!2!',
+    '!3!',
+    '!4!',
+    '!5!',
+    '!+!',
+    '!plus!',
+    '!snap!',
+    '!slide!',
+    '!wedge!',
+    '!upbow!',
+    '!downbow!',
+    '!open!',
+    '!thumb!',
+    '!breath!',
+    '!pppp!',
+    '!ppp!',
+    '!pp!',
+    '!p!',
+    '!mp!',
+    '!mf!',
+    '!f!',
+    '!ff!',
+    '!fff!',
+    '!ffff!',
+    '!sfz!',
+    '!crescendo(!',
+    '!<(!',
+    '!crescendo)!',
+    '!<)!',
+    '!diminuendo(!',
+    '!>(!',
+    '!diminuendo)!',
+    '!>)!',
+    '!segno!',
+    '!coda!',
+    '!D.S.!',
+    '!D.C.!',
+    '!dacoda!',
+    '!dacapo!',
+    '!fine!',
+    '!shortphrase!',
+    '!mediumphrase!',
+    '!longphrase!',
+    '.',
+    '~',
+    'H',
+    'L',
+    'M',
+    'O',
+    'P',
+    'S',
+    'T',
+    'u',
+    'v'
+]
+
 
 class Tune:
 
     """
     This class represents a parsed tune.
 
-    Its attributes are generated from :py:const:`HEADER_KEYS`, with the addition of
-    :py:meth:`abc` and :py:attr:`expanded_abc`.
+    Its attributes are generated from :py:const:`HEADER_KEYS`, with the
+    addition of :py:meth:`abc` and :py:attr:`expanded_abc`.
 
     Example::
 
@@ -88,6 +168,43 @@ class Tune:
 
     def __str__(self):
         return self.title[0]
+
+    def _get_header_line(self, field):
+        """Retrieve every header/field line
+
+        This function will yield all of the specified `field` lines formatted
+        as id:line, for example 'T:Fictional title.'
+
+        :param str field: :class:`Tune` attribute containing wanted field
+
+        """
+        for line in getattr(self, field):
+            yield '{}:{}'.format(get_id_from_field(field), line)
+
+    def format_abc(self):
+        """Format ABC tune
+
+        This will return the current :class:`Tune` as a properly formatted
+        string, including header fields and ABC.
+
+        :returns: ABC string suitable for writing to file
+        :rtype: str
+
+        """
+        ret = list()
+        for attr in ['index', 'title', 'composer', 'origin', 'rhythm', 'book',
+                     'discography', 'file', 'group', 'history', 'notes',
+                     'source', 'transcription', 'parts', 'metre',
+                     'note_length', 'tempo', 'key']:
+            for line in self._get_header_line(attr):
+                ret.append(line)
+
+        for line in self._abc:
+            ret.append(line)
+
+        ret.append('\n')
+
+        return '\n'.join(ret)
 
 
 class Parser:
@@ -225,6 +342,35 @@ class Parser:
             return False
 
 
+def get_id_from_field(field):
+    """Get id char from field name
+
+    :param str field: 'long' name of field, for example 'title'
+    :returns: id character, for example 'T'
+    :rtype: str
+
+    """
+    for key in HEADER_KEYS:
+        if HEADER_KEYS[key] == field:
+            return key
+    else:
+        raise KeyError('No such header key: {}'.format(field))
+
+
+def get_field_from_id(id):
+    """Get long field name from id char.
+
+    :param str id: id char, for example 'T'
+    :returns: long field name, like 'title'
+    :rtype: str
+
+    """
+    try:
+        return HEADER_KEYS[id]
+    except KeyError:
+        raise KeyError('No such header key: {}'.format(id))
+
+
 def parse_file(filename):
     """Run Parser on file contents
 
@@ -278,6 +424,9 @@ def strip_ornaments(abc):
     :returns: filtered abc
     :rtype: str
 
+    .. deprecated:: 1.2.0
+        Use :func:`strip_gracenotes` and :func:`strip_decorations` instead.
+
     """
 
     tmp = []
@@ -294,6 +443,54 @@ def strip_ornaments(abc):
     ret = ''.join(tmp)
     for rep in ['!trill(!', '!trill)!', '!turn!', '!fermata!']:
         ret = ret.replace(rep, '')
+    return ret
+
+
+def strip_gracenotes(abc):
+    """Remove gracenotes
+
+    Example::
+
+        >>> stripped = strip_gracenotes('abc bcd|c3 def|{/def}efg abc|')
+        >>> stripped
+        'abc bcd|c3 def|efg abc|'
+
+    :param str abc: abc to strip
+    :returns: abc stripped from gracenotes
+    :rtype: str
+
+    """
+    tmp = []
+    in_gracenote = False
+    for c in abc:
+        if c == '{':
+            in_gracenote = True
+            continue
+        if c == '}':
+            in_gracenote = False
+            continue
+        if not in_gracenote:
+            tmp.append(c)
+    return ''.join(tmp)
+
+
+def strip_decorations(abc):
+    """Remove decorations
+
+    Removes decorations defined in the v2.1 ABC notation standard.
+
+    :param str abc: ABC notation to process
+    :returns: stripped ABC
+    :rtype: str
+
+    .. seealso:: :const:`DECORATIONS`
+    .. versionadded:: 1.2.0
+
+    """
+    ret = abc
+    for decoration in DECORATIONS:
+        ret = ret.replace(decoration, '')
+
     return ret
 
 
@@ -438,12 +635,10 @@ def expand_parts(abc):
     """
     Expand repeats with support for (two) alternate endings.
 
-    An alternate ending may contain a maximum of two bars, as per ABC
-    standard. There may be a maximum of two alternative endings. Although one
-    could do more than two endings in ABC, using P:parts, I hardly ever see it
-    and therefore have not implemented support for it here. In Henrik
-    Norbeck's tune collection (May 2015), there was not a single one of the
-    2312 tunes that contained a third ending. Enough said.
+    Example::
+
+        >>> print(expand_parts('aaa|bbb|1ccc:|2ddd|]'))
+        aaa|bbb|ccc|aaa|bbb|ddd|
 
     :param str abc: abc to expand
     :returns: expanded abc
@@ -453,6 +648,8 @@ def expand_parts(abc):
     parsed_abc = abc
     start = 0
     end = 0
+
+    parsed_abc = parsed_abc.replace('::', ':||:')
 
     while True:
         end = parsed_abc.find(':|', start)
@@ -571,7 +768,8 @@ def expand_abc(abc):
     ret = strip_accidentals(ret)
     ret = strip_triplets(ret)
     ret = strip_chords(ret)
-    ret = strip_ornaments(ret)
+    ret = strip_gracenotes(ret)
+    ret = strip_decorations(ret)
     ret = expand_notes(ret)
     ret = expand_parts(ret)
     ret = strip_whitespace(ret)

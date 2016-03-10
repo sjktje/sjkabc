@@ -1,6 +1,29 @@
 # Change Log
 
-## [Unreleased]
+## Unreleased
+
+## 1.2.0 - 2016-03-10
+
+### Added
+
+* Support for P: (parts)
+* Tune method format_abc which returns a properly formatted tune.
+* Support for F: (file)
+* Support :: shorthand syntax (which equals :||:)
+* strip_decorations()
+* strip_gracenotes()
+
+### Removed
+
+* Support for A: as it's deprecated according to the ABC standard.
+
+### Fixed
+
+* Travis-CI
+
+### Deprecated
+
+* strip_ornaments. It has been replaced by strip_decorations and strip_gracenotes and will be removed in future versions.
 
 ## 1.1.0 - 2016-03-08
 
@@ -13,7 +36,3 @@
 
 * Documentation is now in ReST, generated with Sphinx.
 * Some minor refactoring of code
-
-### Fixed
-
-[Unreleased]: https://github.com/sjktje/sjkabc/compare/v1.1.0...HEAD

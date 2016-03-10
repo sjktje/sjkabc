@@ -6,32 +6,34 @@ from sjkabc.sjkabc import strip_ornaments, strip_whitespace, strip_accidentals
 from sjkabc.sjkabc import strip_octave, strip_bar_dividers, expand_notes
 from sjkabc.sjkabc import expand_parts, strip_triplets, strip_chords
 from sjkabc.sjkabc import strip_extra_chars, expand_abc, HEADER_KEYS
+from sjkabc.sjkabc import get_id_from_field, get_field_from_id
+from sjkabc.sjkabc import strip_decorations, strip_gracenotes
 from sjkabc import Tune, Parser
 
 
 class ABCManipulationTestCase(unittest.TestCase):
 
-    def test_strip_tildes(self):
+    def test_strip_ornaments_tildes(self):
         abc = "BEE ~B3|Bdf edB|BAF ~F3|DFA BAF|"
         stripped = strip_ornaments(abc)
         self.assertEqual(stripped, 'BEE B3|Bdf edB|BAF F3|DFA BAF|')
 
-    def test_strip_gracenotes(self):
+    def test_strip_ornaments_gracenotes(self):
         abc = "ABcd {/d}Bcde|B{/d}B{/A}B e {/dada}eAce|BAGA {dega}BAGA"
         stripped = strip_ornaments(abc)
         self.assertEqual(stripped, 'ABcd Bcde|BBB e eAce|BAGA BAGA')
 
-    def test_strip_trills(self):
+    def test_strip_ornaments_trills(self):
         abc = "abcd !trill(!efga|deg!trill)!a bega"
         stripped = strip_ornaments(abc)
         self.assertEqual(stripped, 'abcd efga|dega bega')
 
-    def test_strip_turns(self):
+    def test_strip_ornaments_turns(self):
         abc = 'ab!turn!cd baga|baga daga'
         stripped = strip_ornaments(abc)
         self.assertEqual(stripped, 'abcd baga|baga daga')
 
-    def test_strip_fermata(self):
+    def test_strip_ornaments_fermata(self):
         abc = 'ab!fermata!cd efg!fermata!a|baga baga'
         stripped = strip_ornaments(abc)
         self.assertEqual(stripped, 'abcd efga|baga baga')
@@ -93,6 +95,15 @@ class ABCManipulationTestCase(unittest.TestCase):
                          'bcd bcd|cde cde|def def|efg efg|' +
                          'bcd bcd|cde cde|def def|efg efg|')
 
+    def test_expand_two_repeats_with_double_colon_syntax(self):
+        abc = '|:aaa|bbb::' + \
+              'ccc|ddd:|'
+        expanded = expand_parts(abc)
+        self.assertEqual(
+            expanded,
+            'aaa|bbb|aaa|bbb|ccc|ddd|ccc|ddd|'
+        )
+
     def test_expand_part_with_two_one_bar_endings(self):
         abc = 'abc bcd|abc bcd|1deg bag:|2geg gag||'
         expanded = expand_parts(abc)
@@ -134,7 +145,8 @@ class ABCManipulationTestCase(unittest.TestCase):
     def test_expand_three_part_tune(self):
         abc = 'B3B {/d}BAGA|B2GB AGEG|DBB/B/B BAGB|A/B/cBG AGEG|'
         abc += 'B3 B2 A GA|B2GB AGEG|Beed BedB|AdBG A/B/AGE||'
-        abc += '|:DGG/G/G G2BG|G/G/GBG AGEG|DGG/G/G GABc|1dBAc BGGE:|2dBAc BGBc||'
+        abc += '|:DGG/G/G G2BG|G/G/GBG AGEG|DGG/G/G GABc'
+        abc += '|1dBAc BGGE:|2dBAc BGBc||'
         abc += '|:d2Bd egge|dB~B2 ABGB|d2Bd egge|1agbg ageg:|2agbg aged|]'
         expanded = expand_parts(abc)
         self.assertEqual(
@@ -162,6 +174,11 @@ class ABCManipulationTestCase(unittest.TestCase):
         stripped = strip_extra_chars(abc)
         self.assertEqual(stripped, 'ABc ecd|cBAF ABce|dBGA BdcB')
 
+    def test_strip_gracenotes(self):
+        abc = "ABcd {/d}Bcde|B{/d}B{/A}B e {/dada}eAce|BAGA {dega}BAGA"
+        stripped = strip_gracenotes(abc)
+        self.assertEqual(stripped, 'ABcd Bcde|BBB e eAce|BAGA BAGA')
+
     def test_expand_abc(self):
         abc = 'A2eA BAec|ABcd egdB|G2dG BGdG|G/G/G dG BAGB|\\'
         abc += 'A2eA BAec|ABcd egdB|GABd eaaf|1gedB BAAG:|2gedB BAce||'
@@ -180,10 +197,6 @@ class ABCManipulationTestCase(unittest.TestCase):
         self.assertEqual(processed, expected)
 
     def test_tune_object_initialises_empty_lists(self):
-        """TODO: Docstring
-        :returns: TODO
-
-        """
         tune = Tune()
         for key in HEADER_KEYS:
             self.assertEqual(getattr(tune, HEADER_KEYS[key]), [])
@@ -195,6 +208,304 @@ class ABCManipulationTestCase(unittest.TestCase):
         t = Tune()
         t.abc = '|:abc bcd|bcd bcd:|'
         self.assertEqual(t.expanded_abc, 'abcbcdbcdbcdabcbcdbcdbcd')
+
+    def test_parser_detects_comment(self):
+        p = Parser('blah')
+        self.assertTrue(p._line_comment('% This is a test'))
+
+    def test_tune_object_returns_title_string_representation(self):
+        t = Tune()
+        t.title.append('Test')
+        self.assertEqual(str(t), 'Test')
+
+    def test_get_id_from_field_returns_correct_id(self):
+        id = get_id_from_field('title')
+        self.assertEqual(id, 'T')
+
+    def test_get_field_from_id(self):
+        field = get_field_from_id('T')
+        self.assertEqual(field, 'title')
+
+
+class TestDecorations(unittest.TestCase):
+    def test_strip_staccatos(self):
+        abc = '|:a.b.c.:|'
+        self.assertEqual(strip_decorations(abc), '|:abc:|')
+
+    def test_strip_rolls(self):
+        abc = '|:a~b~cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_shorthand_fermatas(self):
+        abc = '|:aHbcd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_shorthand_accent_or_emphasis(self):
+        abc = '|:aLbLcd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_shorthand_lowermordent(self):
+        abc = '|:aMbMcMd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_shorthand_codas(self):
+        abc = '|:aObOcd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_shorthand_uppermordent(self):
+        abc = '|:aPbPcPd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_shorthand_segno(self):
+        abc = '|:aSbScSd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_shorthand_trill(self):
+        abc = '|:aTbTcTd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_shorthand_upbow(self):
+        abc = '|:aubucud:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_shorthand_downbow(self):
+        abc = '|:avbvcvd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_trills(self):
+        abc = '|:ab!trill!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_start_of_extended_trill(self):
+        abc = '|:ab!trill(!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_end_of_extended_trill(self):
+        abc = '|:ab!trill)!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_lowermordent(self):
+        abc = '|:ab!lowermordent!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_uppermordent(self):
+        abc = '|:ab!uppermordent!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_mordent(self):
+        abc = '|:ab!mordent!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_pralltriller(self):
+        abc = '|:ab!pralltriller!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_roll(self):
+        abc = '|:ab!roll!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_turn(self):
+        abc = '|:ab!turn!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_turnx(self):
+        abc = '|:ab!turnx!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_invertedturn(self):
+        abc = '|:ab!invertedturn!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_invertedturnx(self):
+        abc = '|:ab!invertedturnx!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_arpeggio(self):
+        abc = '|:ab!arpeggio!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_greater_than_mark(self):
+        abc = '|:ab!>!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_accent(self):
+        abc = '|:ab!accent!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_emphasis(self):
+        abc = '|:ab!emphasis!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_fermata(self):
+        abc = '|:ab!fermata!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_invertedfermata(self):
+        abc = '|:ab!invertedfermata!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_tenuto(self):
+        abc = '|:ab!tenuto!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_fingerings(self):
+        for i in range(6):
+            abc = '|:ab!{}!cd:|'.format(i)
+            self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_left_hand_pizzicato(self):
+        abc = '|:ab!+!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+        abc = '|:ab!plus!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_snap(self):
+        abc = '|:ab!snap!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_slide(self):
+        abc = '|:ab!slide!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_wedge(self):
+        abc = '|:ab!wedge!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_upbow(self):
+        abc = '|:ab!upbow!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_downbow(self):
+        abc = '|:ab!downbow!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_open(self):
+        abc = '|:ab!open!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_thumb(self):
+        abc = '|:ab!thumb!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_breath(self):
+        abc = '|:ab!breath!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_dynamic_marks(self):
+        for mark in ['pppp', 'ppp', 'pp', 'p', 'mp', 'mf',
+                     'f', 'ff', 'fff', 'ffff', 'sfz']:
+            abc = '|:ab!{}!cd:|'.format(mark)
+            self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_crescendos(self):
+        for mark in ['crescendo(', '<(', 'crescendo)', '<)']:
+            abc = '|:ab!{}!cd:|'.format(mark)
+            self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_diminuendos(self):
+        for mark in ['diminuendo(', '>(', 'diminuendo)', '>)']:
+            abc = '|:ab!{}!cd:|'.format(mark)
+            self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_segno(self):
+        abc = '|:ab!segno!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_coda(self):
+        abc = '|:ab!coda!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_ds(self):
+        abc = '|:ab!D.S.!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_dc(self):
+        abc = '|:ab!D.C.!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_dacapo(self):
+        abc = '|:ab!dacapo!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_dacoda(self):
+        abc = '|:ab!dacoda!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_fine(self):
+        abc = '|:ab!fine!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_shortphrase(self):
+        abc = '|:ab!shortphrase!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_mediumphrase(self):
+        abc = '|:ab!mediumphrase!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_longphrase(self):
+        abc = '|:ab!longphrase!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+
+class TestTune(unittest.TestCase):
+    def setUp(self):
+        self.t = Tune()
+        self.t.book.append('The Bible')
+        self.t.composer.append('John Doe')
+        self.t.discography.append('Best hits')
+        self.t.file.append('http://bogus.url.com/test.abc')
+        self.t.group.append('Test')
+        self.t.history.append('Interesting')
+        self.t.instruction.append('Some instructions')
+        self.t.key.append('Gm')
+        self.t.note_length.append('1/8')
+        self.t.metre.append('4/4')
+        self.t.notes.append('A note')
+        self.t.origin.append('Sweden')
+        self.t.parts.append('AABB')
+        self.t.tempo.append('108')
+        self.t.rhythm.append('reel')
+        self.t.source.append('John Smith')
+        self.t.title.append('Test title')
+        self.t.title.append('Second test title')
+        self.t.index.append('1')
+        self.t.transcription.append('Doctor Who')
+        self.t.abc.append('|:aaa|bbb|ccc:|')
+
+    def test_get_header_line(self):
+        titles = list()
+        for title in self.t._get_header_line('title'):
+            titles.append(title)
+
+        self.assertEqual(titles, ['T:Test title', 'T:Second test title'])
+
+    def test_format_abc_returns_header_lines_in_correct_order(self):
+        correct = """X:1
+T:Test title
+T:Second test title
+C:John Doe
+O:Sweden
+R:reel
+B:The Bible
+D:Best hits
+F:http://bogus.url.com/test.abc
+G:Test
+H:Interesting
+N:A note
+S:John Smith
+Z:Doctor Who
+P:AABB
+M:4/4
+L:1/8
+Q:108
+K:Gm
+|:aaa|bbb|ccc:|
+
+"""
+        self.assertEqual(correct, self.t.format_abc())
+
 
 if __name__ == '__main__':
     unittest.main()

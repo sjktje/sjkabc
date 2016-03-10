@@ -13,7 +13,7 @@ sjkabc
     :scale: 100%
     :target: https://sjkabc.readthedocs.org/en/master/?badge=master
 
-.. |build-status| image:: https://travis-ci.org/sjktje/sjkabc.svg?branch=master
+.. |build-status| image:: https://travis-ci.org/sjktje/sjkabc.svg?branch=develop
     :alt: Build status
     :scale: 100%
     :target: https://travis-ci.org/sjktje/sjkabc
