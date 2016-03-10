@@ -89,15 +89,13 @@ class Tune:
     def __str__(self):
         return self.title[0]
 
-    def _get_attr(self, attr):
-        """Return concatenated object attribute
-
-        :param attr: :class:`Tune` attribute
-        :returns: concatenated attribute
-        :rtype: str
+    def _get_header_line(self, field):
+        """TODO.
 
         """
-        return '\n'.join(getattr(self, attr))
+        for line in getattr(self, field):
+            yield '{}:{}'.format(get_id_from_field(field), line)
+
 
 
 class Parser:
