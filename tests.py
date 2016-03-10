@@ -325,6 +325,122 @@ class TestDecorations(unittest.TestCase):
         abc = '|:ab!accent!cd:|'
         self.assertEqual(strip_decorations(abc), '|:abcd:|')
 
+    def test_strip_emphasis(self):
+        abc = '|:ab!emphasis!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_fermata(self):
+        abc = '|:ab!fermata!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_invertedfermata(self):
+        abc = '|:ab!invertedfermata!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_tenuto(self):
+        abc = '|:ab!tenuto!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_fingerings(self):
+        for i in range(6):
+            abc = '|:ab!{}!cd:|'.format(i)
+            self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_left_hand_pizzicato(self):
+        abc = '|:ab!+!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+        abc = '|:ab!plus!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_snap(self):
+        abc = '|:ab!snap!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_slide(self):
+        abc = '|:ab!slide!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_wedge(self):
+        abc = '|:ab!wedge!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_upbow(self):
+        abc = '|:ab!upbow!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_downbow(self):
+        abc = '|:ab!downbow!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_open(self):
+        abc = '|:ab!open!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_thumb(self):
+        abc = '|:ab!thumb!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_breath(self):
+        abc = '|:ab!breath!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_dynamic_marks(self):
+        for mark in ['pppp', 'ppp', 'pp', 'p', 'mp', 'mf',
+                     'f', 'ff', 'fff', 'ffff', 'sfz']:
+            abc = '|:ab!{}!cd:|'.format(mark)
+            self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_crescendos(self):
+        for mark in ['crescendo(', '<(', 'crescendo)', '<)']:
+            abc = '|:ab!{}!cd:|'.format(mark)
+            self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_diminuendos(self):
+        for mark in ['diminuendo(', '>(', 'diminuendo)', '>)']:
+            abc = '|:ab!{}!cd:|'.format(mark)
+            self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_segno(self):
+        abc = '|:ab!segno!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_coda(self):
+        abc = '|:ab!coda!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_ds(self):
+        abc = '|:ab!D.S.!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_dc(self):
+        abc = '|:ab!D.C.!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_dacapo(self):
+        abc = '|:ab!dacapo!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_dacoda(self):
+        abc = '|:ab!dacoda!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_fine(self):
+        abc = '|:ab!fine!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_shortphrase(self):
+        abc = '|:ab!shortphrase!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_mediumphrase(self):
+        abc = '|:ab!mediumphrase!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_longphrase(self):
+        abc = '|:ab!longphrase!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
 
 class TestTune(unittest.TestCase):
     def setUp(self):
