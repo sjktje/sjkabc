@@ -293,6 +293,38 @@ class TestDecorations(unittest.TestCase):
         abc = '|:ab!pralltriller!cd:|'
         self.assertEqual(strip_decorations(abc), '|:abcd:|')
 
+    def test_strip_roll(self):
+        abc = '|:ab!roll!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_turn(self):
+        abc = '|:ab!turn!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_turnx(self):
+        abc = '|:ab!turnx!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_invertedturn(self):
+        abc = '|:ab!invertedturn!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_invertedturnx(self):
+        abc = '|:ab!invertedturnx!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_arpeggio(self):
+        abc = '|:ab!arpeggio!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_greater_than_mark(self):
+        abc = '|:ab!>!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_accent(self):
+        abc = '|:ab!accent!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
 
 class TestTune(unittest.TestCase):
     def setUp(self):
