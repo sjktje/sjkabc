@@ -90,7 +90,12 @@ class Tune:
         return self.title[0]
 
     def _get_header_line(self, field):
-        """TODO.
+        """Retrieve every header/field line
+
+        This function will yield all of the specified `field` lines formatted
+        as id:line, for example 'T:Fictional title.'
+
+        :param str field: :class:`Tune` attribute containing wanted field
 
         """
         for line in getattr(self, field):
