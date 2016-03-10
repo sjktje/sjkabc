@@ -519,6 +519,8 @@ def expand_parts(abc):
     start = 0
     end = 0
 
+    parsed_abc = parsed_abc.replace('::', ':||:')
+
     while True:
         end = parsed_abc.find(':|', start)
         if (end == -1):

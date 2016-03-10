@@ -94,6 +94,15 @@ class ABCManipulationTestCase(unittest.TestCase):
                          'bcd bcd|cde cde|def def|efg efg|' +
                          'bcd bcd|cde cde|def def|efg efg|')
 
+    def test_expand_two_repeats_with_double_colon_syntax(self):
+        abc = '|:aaa|bbb::' + \
+              'ccc|ddd:|'
+        expanded = expand_parts(abc)
+        self.assertEqual(
+            expanded,
+            'aaa|bbb|aaa|bbb|ccc|ddd|ccc|ddd|'
+        )
+
     def test_expand_part_with_two_one_bar_endings(self):
         abc = 'abc bcd|abc bcd|1deg bag:|2geg gag||'
         expanded = expand_parts(abc)
