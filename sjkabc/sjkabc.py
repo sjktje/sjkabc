@@ -39,6 +39,85 @@ HEADER_KEYS = dict(
     Z='transcription'
 )
 
+#: List of decoration symbols according to the ABC notation standard v2.1.
+DECORATIONS = list(
+    '.',
+    '~'
+    'H',
+    'L',
+    'M',
+    'O',
+    'P',
+    'S',
+    'T',
+    'u',
+    'v',
+    '!trill!',
+    '!trill(!',
+    '!trill)!',
+    '!lowermordent!',
+    '!uppermordent!',
+    '!mordent!',
+    '!pralltriller!',
+    '!roll!',
+    '!turn!',
+    '!turnx!',
+    '!invertedturn!',
+    '!invertedturnx!',
+    '!arpeggio!',
+    '!>!',
+    '!accent!',
+    '!emphasis!',
+    '!fermata!',
+    '!invertedfermata!',
+    '!tenuto!',
+    '!0!',
+    '!1!',
+    '!2!',
+    '!3!',
+    '!4!',
+    '!5!',
+    '!+!',
+    '!plus!',
+    '!snap!',
+    '!slide!',
+    '!wedge!',
+    '!upbow!',
+    '!downbow!',
+    '!open!',
+    '!thumb!',
+    '!breath!',
+    '!pppp!',
+    '!ppp!',
+    '!pp!',
+    '!p!',
+    '!mp!',
+    '!mf!',
+    '!f!',
+    '!ff!',
+    '!fff!',
+    '!ffff!',
+    '!sfz!',
+    '!crescendo(!',
+    '!<(!',
+    '!crescendo)!',
+    '!<)!',
+    '!diminuendo(!',
+    '!>(!',
+    '!diminuendo)!',
+    '!>)!',
+    '!segno!',
+    '!coda!',
+    '!D.S.!',
+    '!D.C.!',
+    '!dacoda!',
+    '!dacapo!',
+    '!fine!',
+    '!shortphrase!',
+    '!mediumphrase!',
+    '!longphrase!',
+)
+
 
 class Tune:
 
@@ -361,6 +440,26 @@ def strip_ornaments(abc):
     ret = ''.join(tmp)
     for rep in ['!trill(!', '!trill)!', '!turn!', '!fermata!']:
         ret = ret.replace(rep, '')
+    return ret
+
+
+def strip_decorations(abc):
+    """Remove decorations
+
+    Removes decorations defined in the v2.1 ABC notation standard.
+
+    :param str abc: ABC notation to process
+    :returns: stripped ABC
+    :rtype: str
+
+    .. seealso:: :const:`DECORATIONS`
+    .. versionadded:: 1.2.0
+
+    """
+    ret = abc
+    for decoration in DECORATIONS:
+        ret = ret.replace(decoration, '')
+
     return ret
 
 
