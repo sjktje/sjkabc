@@ -6,6 +6,7 @@ from sjkabc.sjkabc import strip_ornaments, strip_whitespace, strip_accidentals
 from sjkabc.sjkabc import strip_octave, strip_bar_dividers, expand_notes
 from sjkabc.sjkabc import expand_parts, strip_triplets, strip_chords
 from sjkabc.sjkabc import strip_extra_chars, expand_abc, HEADER_KEYS
+from sjkabc.sjkabc import get_id_from_field, get_field_from_id
 from sjkabc import Tune, Parser
 
 
@@ -204,6 +205,14 @@ class ABCManipulationTestCase(unittest.TestCase):
         t = Tune()
         t.title.append('Test')
         self.assertEqual(str(t), 'Test')
+
+    def test_get_id_from_field_returns_correct_id(self):
+        id = get_id_from_field('title')
+        self.assertEqual(id, 'T')
+
+    def test_get_field_from_id(self):
+        field = get_field_from_id('T')
+        self.assertEqual(field, 'title')
 
 
 class TestHeaderParsing(unittest.TestCase):
