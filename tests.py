@@ -245,6 +245,10 @@ class TestDecorations(unittest.TestCase):
         abc = '|:aObOcd:|'
         self.assertEqual(strip_decorations(abc), '|:abcd:|')
 
+    def test_strip_shorthand_uppermordent(self):
+        abc = '|:aPbPcPd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
 
 class TestTune(unittest.TestCase):
     def setUp(self):
