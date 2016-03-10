@@ -424,6 +424,9 @@ def strip_ornaments(abc):
     :returns: filtered abc
     :rtype: str
 
+    .. deprecated:: 1.2.0
+        Use :func:`strip_gracenotes` and :func:`strip_decorations` instead.
+
     """
 
     tmp = []
