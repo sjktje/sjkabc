@@ -237,6 +237,10 @@ class TestDecorations(unittest.TestCase):
         abc = '|:aLbLcd:|'
         self.assertEqual(strip_decorations(abc), '|:abcd:|')
 
+    def test_strip_shorthand_lowermordent(self):
+        abc = '|:aMbMcMd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
 
 class TestTune(unittest.TestCase):
     def setUp(self):
