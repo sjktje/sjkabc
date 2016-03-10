@@ -8,6 +8,7 @@
 * Tune method format_abc which returns a properly formatted tune.
 * Support for F: (file)
 * Support :: shorthand syntax (which equals :||:)
+* strip_decorations()
 
 ### Removed
 
