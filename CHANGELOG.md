@@ -5,6 +5,11 @@
 ### Added
 
 * Support for P: (parts)
+* Tune method format_abc which returns a properly formatted tune.
+
+### Removed
+
+* Support for A: as it's deprecated according to the ABC standard.
 
 ### Fixed
 
