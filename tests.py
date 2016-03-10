@@ -217,6 +217,7 @@ class TestTune(unittest.TestCase):
         self.t.book.append('The Bible')
         self.t.composer.append('John Doe')
         self.t.discography.append('Best hits')
+        self.t.file.append('http://bogus.url.com/test.abc')
         self.t.group.append('Test')
         self.t.history.append('Interesting')
         self.t.instruction.append('Some instructions')
@@ -251,6 +252,7 @@ O:Sweden
 R:reel
 B:The Bible
 D:Best hits
+F:http://bogus.url.com/test.abc
 G:Test
 H:Interesting
 N:A note
