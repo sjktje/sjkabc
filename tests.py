@@ -181,10 +181,6 @@ class ABCManipulationTestCase(unittest.TestCase):
         self.assertEqual(processed, expected)
 
     def test_tune_object_initialises_empty_lists(self):
-        """TODO: Docstring
-        :returns: TODO
-
-        """
         tune = Tune()
         for key in HEADER_KEYS:
             self.assertEqual(getattr(tune, HEADER_KEYS[key]), [])
