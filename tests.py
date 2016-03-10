@@ -253,6 +253,10 @@ class TestDecorations(unittest.TestCase):
         abc = '|:aSbScSd:|'
         self.assertEqual(strip_decorations(abc), '|:abcd:|')
 
+    def test_strip_shorthand_trill(self):
+        abc = '|:aTbTcTd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
 
 class TestTune(unittest.TestCase):
     def setUp(self):
