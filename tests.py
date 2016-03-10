@@ -277,6 +277,22 @@ class TestDecorations(unittest.TestCase):
         abc = '|:ab!trill)!cd:|'
         self.assertEqual(strip_decorations(abc), '|:abcd:|')
 
+    def test_strip_lowermordent(self):
+        abc = '|:ab!lowermordent!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_uppermordent(self):
+        abc = '|:ab!uppermordent!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_mordent(self):
+        abc = '|:ab!mordent!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_pralltriller(self):
+        abc = '|:ab!pralltriller!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
 
 class TestTune(unittest.TestCase):
     def setUp(self):
