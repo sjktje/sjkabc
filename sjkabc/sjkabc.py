@@ -263,10 +263,11 @@ class Parser:
 
 
 def get_id_from_field(field):
-    """TODO: Docstring
+    """Get id char from field name
 
-    :param field: TODO
-    :returns: TODO
+    :param str field: 'long' name of field, for example 'title'
+    :returns: id character, for example 'T'
+    :rtype: str
 
     """
     for key in HEADER_KEYS:
