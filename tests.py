@@ -226,6 +226,10 @@ class TestDecorations(unittest.TestCase):
         abc = '|:a.b.c.:|'
         self.assertEqual(strip_decorations(abc), '|:abc:|')
 
+    def test_strip_rolls(self):
+        abc = '|:a~b~cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
 
 class TestTune(unittest.TestCase):
     def setUp(self):
