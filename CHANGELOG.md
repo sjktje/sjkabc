@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.2.0 - 2016-03-10
+
 ### Added
 
 * Support for P: (parts)
@@ -34,5 +36,3 @@
 
 * Documentation is now in ReST, generated with Sphinx.
 * Some minor refactoring of code
-
-### Fixed
