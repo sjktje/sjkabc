@@ -249,6 +249,10 @@ class TestDecorations(unittest.TestCase):
         abc = '|:aPbPcPd:|'
         self.assertEqual(strip_decorations(abc), '|:abcd:|')
 
+    def test_strip_shorthand_segno(self):
+        abc = '|:aSbScSd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
 
 class TestTune(unittest.TestCase):
     def setUp(self):
