@@ -18,7 +18,6 @@ import os
 
 
 HEADER_KEYS = dict(
-    A='area',
     B='book',
     C='composer',
     D='discography',
@@ -45,8 +44,8 @@ class Tune:
     """
     This class represents a parsed tune.
 
-    Its attributes are generated from :py:const:`HEADER_KEYS`, with the addition of
-    :py:meth:`abc` and :py:attr:`expanded_abc`.
+    Its attributes are generated from :py:const:`HEADER_KEYS`, with the
+    addition of :py:meth:`abc` and :py:attr:`expanded_abc`.
 
     Example::
 
@@ -89,6 +88,43 @@ class Tune:
 
     def __str__(self):
         return self.title[0]
+
+    def _get_header_line(self, field):
+        """Retrieve every header/field line
+
+        This function will yield all of the specified `field` lines formatted
+        as id:line, for example 'T:Fictional title.'
+
+        :param str field: :class:`Tune` attribute containing wanted field
+
+        """
+        for line in getattr(self, field):
+            yield '{}:{}'.format(get_id_from_field(field), line)
+
+    def format_abc(self):
+        """Format ABC tune
+
+        This will return the current :class:`Tune` as a properly formatted
+        string, including header fields and ABC.
+
+        :returns: ABC string suitable for writing to file
+        :rtype: str
+
+        """
+        ret = list()
+        for attr in ['index', 'title', 'composer', 'origin', 'rhythm',
+                     'book', 'discography', 'group', 'history', 'notes',
+                     'source', 'transcription', 'parts', 'metre',
+                     'note_length', 'tempo', 'key']:
+            for line in self._get_header_line(attr):
+                ret.append(line)
+
+        for line in self._abc:
+            ret.append(line)
+
+        ret.append('\n')
+
+        return '\n'.join(ret)
 
 
 class Parser:
@@ -224,6 +260,35 @@ class Parser:
             return True
         else:
             return False
+
+
+def get_id_from_field(field):
+    """Get id char from field name
+
+    :param str field: 'long' name of field, for example 'title'
+    :returns: id character, for example 'T'
+    :rtype: str
+
+    """
+    for key in HEADER_KEYS:
+        if HEADER_KEYS[key] == field:
+            return key
+    else:
+        raise KeyError('No such header key: {}'.format(field))
+
+
+def get_field_from_id(id):
+    """Get long field name from id char.
+
+    :param str id: id char, for example 'T'
+    :returns: long field name, like 'title'
+    :rtype: str
+
+    """
+    try:
+        return HEADER_KEYS[id]
+    except KeyError:
+        raise KeyError('No such header key: {}'.format(id))
 
 
 def parse_file(filename):

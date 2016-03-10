@@ -6,6 +6,7 @@ from sjkabc.sjkabc import strip_ornaments, strip_whitespace, strip_accidentals
 from sjkabc.sjkabc import strip_octave, strip_bar_dividers, expand_notes
 from sjkabc.sjkabc import expand_parts, strip_triplets, strip_chords
 from sjkabc.sjkabc import strip_extra_chars, expand_abc, HEADER_KEYS
+from sjkabc.sjkabc import get_id_from_field, get_field_from_id
 from sjkabc import Tune, Parser
 
 
@@ -180,10 +181,6 @@ class ABCManipulationTestCase(unittest.TestCase):
         self.assertEqual(processed, expected)
 
     def test_tune_object_initialises_empty_lists(self):
-        """TODO: Docstring
-        :returns: TODO
-
-        """
         tune = Tune()
         for key in HEADER_KEYS:
             self.assertEqual(getattr(tune, HEADER_KEYS[key]), [])
@@ -205,39 +202,69 @@ class ABCManipulationTestCase(unittest.TestCase):
         t.title.append('Test')
         self.assertEqual(str(t), 'Test')
 
+    def test_get_id_from_field_returns_correct_id(self):
+        id = get_id_from_field('title')
+        self.assertEqual(id, 'T')
 
-class TestHeaderParsing(unittest.TestCase):
+    def test_get_field_from_id(self):
+        field = get_field_from_id('T')
+        self.assertEqual(field, 'title')
 
-    """Test case docstring."""
 
+class TestTune(unittest.TestCase):
     def setUp(self):
-        self.header = """
-X:1
-A:Dalarna
-C:John Doe
-D:Test
-G:Test
-H:Something interesting
-I:Some instruction
-L:1/8
-M:4/4
-N:A note
-O:Sweden
-P:AABB
-Q:108
-R:reel
-S:John Smith
-T:Test Tune
-Z:Doctor Who
-K:G
-|:abcd abcd:|
-        """
-        self.parsed = []
-        for tune in Parser(self.header):
-            self.parsed.append(tune)
+        self.t = Tune()
+        self.t.book.append('The Bible')
+        self.t.composer.append('John Doe')
+        self.t.discography.append('Best hits')
+        self.t.group.append('Test')
+        self.t.history.append('Interesting')
+        self.t.instruction.append('Some instructions')
+        self.t.key.append('Gm')
+        self.t.note_length.append('1/8')
+        self.t.metre.append('4/4')
+        self.t.notes.append('A note')
+        self.t.origin.append('Sweden')
+        self.t.parts.append('AABB')
+        self.t.tempo.append('108')
+        self.t.rhythm.append('reel')
+        self.t.source.append('John Smith')
+        self.t.title.append('Test title')
+        self.t.title.append('Second test title')
+        self.t.index.append('1')
+        self.t.transcription.append('Doctor Who')
+        self.t.abc.append('|:aaa|bbb|ccc:|')
 
-    def test_parts_are_parsed_correctly(self):
-        self.assertEqual(self.parsed[-1].parts, ['AABB'])
+    def test_get_header_line(self):
+        titles = list()
+        for title in self.t._get_header_line('title'):
+            titles.append(title)
+
+        self.assertEqual(titles, ['T:Test title', 'T:Second test title'])
+
+    def test_format_abc_returns_header_lines_in_correct_order(self):
+        correct = """X:1
+T:Test title
+T:Second test title
+C:John Doe
+O:Sweden
+R:reel
+B:The Bible
+D:Best hits
+G:Test
+H:Interesting
+N:A note
+S:John Smith
+Z:Doctor Who
+P:AABB
+M:4/4
+L:1/8
+Q:108
+K:Gm
+|:aaa|bbb|ccc:|
+
+"""
+        self.assertEqual(correct, self.t.format_abc())
 
 
 if __name__ == '__main__':
