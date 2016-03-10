@@ -233,6 +233,10 @@ class TestDecorations(unittest.TestCase):
         abc = '|:aHbcd:|'
         self.assertEqual(strip_decorations(abc), '|:abcd:|')
 
+    def test_strip_shorthand_accent_or_emphasis(self):
+        abc = '|:aLbLcd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
 
 class TestTune(unittest.TestCase):
     def setUp(self):
