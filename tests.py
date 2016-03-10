@@ -212,9 +212,6 @@ class ABCManipulationTestCase(unittest.TestCase):
 
 
 class TestTune(unittest.TestCase):
-
-    """Test case docstring."""
-
     def setUp(self):
         self.t = Tune()
         self.t.book.append('The Bible')
@@ -268,40 +265,6 @@ K:Gm
 
 """
         self.assertEqual(correct, self.t.format_abc())
-
-
-class TestHeaderParsing(unittest.TestCase):
-
-    """Test case docstring."""
-
-    def setUp(self):
-        self.header = """
-X:1
-A:Dalarna
-C:John Doe
-D:Test
-G:Test
-H:Something interesting
-I:Some instruction
-L:1/8
-M:4/4
-N:A note
-O:Sweden
-P:AABB
-Q:108
-R:reel
-S:John Smith
-T:Test Tune
-Z:Doctor Who
-K:G
-|:abcd abcd:|
-        """
-        self.parsed = []
-        for tune in Parser(self.header):
-            self.parsed.append(tune)
-
-    def test_parts_are_parsed_correctly(self):
-        self.assertEqual(self.parsed[-1].parts, ['AABB'])
 
 
 if __name__ == '__main__':
