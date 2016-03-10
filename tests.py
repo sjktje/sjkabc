@@ -6,7 +6,8 @@ from sjkabc.sjkabc import strip_ornaments, strip_whitespace, strip_accidentals
 from sjkabc.sjkabc import strip_octave, strip_bar_dividers, expand_notes
 from sjkabc.sjkabc import expand_parts, strip_triplets, strip_chords
 from sjkabc.sjkabc import strip_extra_chars, expand_abc, HEADER_KEYS
-from sjkabc.sjkabc import get_id_from_field, get_field_from_id, strip_decorations
+from sjkabc.sjkabc import get_id_from_field, get_field_from_id
+from sjkabc.sjkabc import strip_decorations
 from sjkabc import Tune, Parser
 
 
@@ -144,7 +145,8 @@ class ABCManipulationTestCase(unittest.TestCase):
     def test_expand_three_part_tune(self):
         abc = 'B3B {/d}BAGA|B2GB AGEG|DBB/B/B BAGB|A/B/cBG AGEG|'
         abc += 'B3 B2 A GA|B2GB AGEG|Beed BedB|AdBG A/B/AGE||'
-        abc += '|:DGG/G/G G2BG|G/G/GBG AGEG|DGG/G/G GABc|1dBAc BGGE:|2dBAc BGBc||'
+        abc += '|:DGG/G/G G2BG|G/G/GBG AGEG|DGG/G/G GABc'
+        abc += '|1dBAc BGGE:|2dBAc BGBc||'
         abc += '|:d2Bd egge|dB~B2 ABGB|d2Bd egge|1agbg ageg:|2agbg aged|]'
         expanded = expand_parts(abc)
         self.assertEqual(
