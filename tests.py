@@ -261,6 +261,22 @@ class TestDecorations(unittest.TestCase):
         abc = '|:aubucud:|'
         self.assertEqual(strip_decorations(abc), '|:abcd:|')
 
+    def test_strip_shorthand_downbow(self):
+        abc = '|:avbvcvd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_trills(self):
+        abc = '|:ab!trill!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_start_of_extended_trill(self):
+        abc = '|:ab!trill(!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_end_of_extended_trill(self):
+        abc = '|:ab!trill)!cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
 
 class TestTune(unittest.TestCase):
     def setUp(self):
