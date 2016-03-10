@@ -229,6 +229,20 @@ class Parser:
             return False
 
 
+def get_id_from_field(field):
+    """TODO: Docstring
+
+    :param field: TODO
+    :returns: TODO
+
+    """
+    for key in HEADER_KEYS:
+        if HEADER_KEYS[key] == field:
+            return key
+    else:
+        raise KeyError('No such header key: {}'.format(field))
+
+
 def parse_file(filename):
     """Run Parser on file contents
 
