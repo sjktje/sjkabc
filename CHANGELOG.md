@@ -6,6 +6,7 @@
 
 * Support for P: (parts)
 * Tune method format_abc which returns a properly formatted tune.
+* Support for F: (file)
 
 ### Removed
 
