@@ -443,6 +443,34 @@ def strip_ornaments(abc):
     return ret
 
 
+def strip_gracenotes(abc):
+    """Remove gracenotes
+
+    Example::
+
+        >>> stripped = strip_gracenotes('abc bcd|c3 def|{/def}efg abc|')
+        >>> stripped
+        'abc bcd|c3 def|efg abc|'
+
+    :param str abc: abc to strip
+    :returns: abc stripped from gracenotes
+    :rtype: str
+
+    """
+    tmp = []
+    in_gracenote = False
+    for c in abc:
+        if c == '{':
+            in_gracenote = True
+            continue
+        if c == '}':
+            in_gracenote = False
+            continue
+        if not in_gracenote:
+            tmp.append(c)
+    return ''.join(tmp)
+
+
 def strip_decorations(abc):
     """Remove decorations
 

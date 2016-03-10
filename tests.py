@@ -7,33 +7,33 @@ from sjkabc.sjkabc import strip_octave, strip_bar_dividers, expand_notes
 from sjkabc.sjkabc import expand_parts, strip_triplets, strip_chords
 from sjkabc.sjkabc import strip_extra_chars, expand_abc, HEADER_KEYS
 from sjkabc.sjkabc import get_id_from_field, get_field_from_id
-from sjkabc.sjkabc import strip_decorations
+from sjkabc.sjkabc import strip_decorations, strip_gracenotes
 from sjkabc import Tune, Parser
 
 
 class ABCManipulationTestCase(unittest.TestCase):
 
-    def test_strip_tildes(self):
+    def test_strip_ornaments_tildes(self):
         abc = "BEE ~B3|Bdf edB|BAF ~F3|DFA BAF|"
         stripped = strip_ornaments(abc)
         self.assertEqual(stripped, 'BEE B3|Bdf edB|BAF F3|DFA BAF|')
 
-    def test_strip_gracenotes(self):
+    def test_strip_ornaments_gracenotes(self):
         abc = "ABcd {/d}Bcde|B{/d}B{/A}B e {/dada}eAce|BAGA {dega}BAGA"
         stripped = strip_ornaments(abc)
         self.assertEqual(stripped, 'ABcd Bcde|BBB e eAce|BAGA BAGA')
 
-    def test_strip_trills(self):
+    def test_strip_ornaments_trills(self):
         abc = "abcd !trill(!efga|deg!trill)!a bega"
         stripped = strip_ornaments(abc)
         self.assertEqual(stripped, 'abcd efga|dega bega')
 
-    def test_strip_turns(self):
+    def test_strip_ornaments_turns(self):
         abc = 'ab!turn!cd baga|baga daga'
         stripped = strip_ornaments(abc)
         self.assertEqual(stripped, 'abcd baga|baga daga')
 
-    def test_strip_fermata(self):
+    def test_strip_ornaments_fermata(self):
         abc = 'ab!fermata!cd efg!fermata!a|baga baga'
         stripped = strip_ornaments(abc)
         self.assertEqual(stripped, 'abcd efga|baga baga')
@@ -173,6 +173,11 @@ class ABCManipulationTestCase(unittest.TestCase):
         abc = 'A/B/c e<cd>|cBAF ABce\\|dBGA BdcB'
         stripped = strip_extra_chars(abc)
         self.assertEqual(stripped, 'ABc ecd|cBAF ABce|dBGA BdcB')
+
+    def test_strip_gracenotes(self):
+        abc = "ABcd {/d}Bcde|B{/d}B{/A}B e {/dada}eAce|BAGA {dega}BAGA"
+        stripped = strip_gracenotes(abc)
+        self.assertEqual(stripped, 'ABcd Bcde|BBB e eAce|BAGA BAGA')
 
     def test_expand_abc(self):
         abc = 'A2eA BAec|ABcd egdB|G2dG BGdG|G/G/G dG BAGB|\\'
