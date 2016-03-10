@@ -21,6 +21,7 @@ HEADER_KEYS = dict(
     B='book',
     C='composer',
     D='discography',
+    F='file',
     G='group',
     H='history',
     I='instruction',
@@ -112,8 +113,8 @@ class Tune:
 
         """
         ret = list()
-        for attr in ['index', 'title', 'composer', 'origin', 'rhythm',
-                     'book', 'discography', 'group', 'history', 'notes',
+        for attr in ['index', 'title', 'composer', 'origin', 'rhythm', 'book',
+                     'discography', 'file', 'group', 'history', 'notes',
                      'source', 'transcription', 'parts', 'metre',
                      'note_length', 'tempo', 'key']:
             for line in self._get_header_line(attr):
