@@ -41,17 +41,6 @@ HEADER_KEYS = dict(
 
 #: List of decoration symbols according to the ABC notation standard v2.1.
 DECORATIONS = [
-    '.',
-    '~',
-    'H',
-    'L',
-    'M',
-    'O',
-    'P',
-    'S',
-    'T',
-    'u',
-    'v',
     '!trill!',
     '!trill(!',
     '!trill)!',
@@ -115,7 +104,18 @@ DECORATIONS = [
     '!fine!',
     '!shortphrase!',
     '!mediumphrase!',
-    '!longphrase!'
+    '!longphrase!',
+    '.',
+    '~',
+    'H',
+    'L',
+    'M',
+    'O',
+    'P',
+    'S',
+    'T',
+    'u',
+    'v'
 ]
 
 
