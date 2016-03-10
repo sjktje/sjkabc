@@ -243,6 +243,13 @@ def get_id_from_field(field):
         raise KeyError('No such header key: {}'.format(field))
 
 
+def get_field_from_id(id):
+    try:
+        return HEADER_KEYS[id]
+    except KeyError:
+        raise KeyError('No such header key: {}'.format(id))
+
+
 def parse_file(filename):
     """Run Parser on file contents
 
