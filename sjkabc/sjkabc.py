@@ -97,11 +97,20 @@ class Tune:
             yield '{}:{}'.format(get_id_from_field(field), line)
 
     def format_abc(self):
+        """Format ABC tune
+
+        This will return the current :class:`Tune` as a properly formatted
+        string, including header fields and ABC.
+
+        :returns: ABC string suitable for writing to file
+        :rtype: str
+
+        """
         ret = list()
         for attr in ['index', 'title', 'composer', 'origin', 'rhythm',
                      'book', 'discography', 'group', 'history', 'notes',
-                     'source', 'transcription', 'parts', 'metre', 'note_length',
-                     'tempo', 'key']:
+                     'source', 'transcription', 'parts', 'metre',
+                     'note_length', 'tempo', 'key']:
             for line in self._get_header_line(attr):
                 ret.append(line)
 
