@@ -8,6 +8,8 @@
 * Tune method format_abc which returns a properly formatted tune.
 * Support for F: (file)
 * Support :: shorthand syntax (which equals :||:)
+* strip_decorations()
+* strip_gracenotes()
 
 ### Removed
 
@@ -16,6 +18,10 @@
 ### Fixed
 
 * Travis-CI
+
+### Deprecated
+
+* strip_ornaments. It has been replaced by strip_decorations and strip_gracenotes and will be removed in future versions.
 
 ## 1.1.0 - 2016-03-08
 

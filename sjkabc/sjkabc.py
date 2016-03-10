@@ -39,6 +39,85 @@ HEADER_KEYS = dict(
     Z='transcription'
 )
 
+#: List of decoration symbols according to the ABC notation standard v2.1.
+DECORATIONS = [
+    '!trill!',
+    '!trill(!',
+    '!trill)!',
+    '!lowermordent!',
+    '!uppermordent!',
+    '!mordent!',
+    '!pralltriller!',
+    '!roll!',
+    '!turn!',
+    '!turnx!',
+    '!invertedturn!',
+    '!invertedturnx!',
+    '!arpeggio!',
+    '!>!',
+    '!accent!',
+    '!emphasis!',
+    '!fermata!',
+    '!invertedfermata!',
+    '!tenuto!',
+    '!0!',
+    '!1!',
+    '!2!',
+    '!3!',
+    '!4!',
+    '!5!',
+    '!+!',
+    '!plus!',
+    '!snap!',
+    '!slide!',
+    '!wedge!',
+    '!upbow!',
+    '!downbow!',
+    '!open!',
+    '!thumb!',
+    '!breath!',
+    '!pppp!',
+    '!ppp!',
+    '!pp!',
+    '!p!',
+    '!mp!',
+    '!mf!',
+    '!f!',
+    '!ff!',
+    '!fff!',
+    '!ffff!',
+    '!sfz!',
+    '!crescendo(!',
+    '!<(!',
+    '!crescendo)!',
+    '!<)!',
+    '!diminuendo(!',
+    '!>(!',
+    '!diminuendo)!',
+    '!>)!',
+    '!segno!',
+    '!coda!',
+    '!D.S.!',
+    '!D.C.!',
+    '!dacoda!',
+    '!dacapo!',
+    '!fine!',
+    '!shortphrase!',
+    '!mediumphrase!',
+    '!longphrase!',
+    '.',
+    '~',
+    'H',
+    'L',
+    'M',
+    'O',
+    'P',
+    'S',
+    'T',
+    'u',
+    'v'
+]
+
 
 class Tune:
 
@@ -345,6 +424,9 @@ def strip_ornaments(abc):
     :returns: filtered abc
     :rtype: str
 
+    .. deprecated:: 1.2.0
+        Use :func:`strip_gracenotes` and :func:`strip_decorations` instead.
+
     """
 
     tmp = []
@@ -361,6 +443,54 @@ def strip_ornaments(abc):
     ret = ''.join(tmp)
     for rep in ['!trill(!', '!trill)!', '!turn!', '!fermata!']:
         ret = ret.replace(rep, '')
+    return ret
+
+
+def strip_gracenotes(abc):
+    """Remove gracenotes
+
+    Example::
+
+        >>> stripped = strip_gracenotes('abc bcd|c3 def|{/def}efg abc|')
+        >>> stripped
+        'abc bcd|c3 def|efg abc|'
+
+    :param str abc: abc to strip
+    :returns: abc stripped from gracenotes
+    :rtype: str
+
+    """
+    tmp = []
+    in_gracenote = False
+    for c in abc:
+        if c == '{':
+            in_gracenote = True
+            continue
+        if c == '}':
+            in_gracenote = False
+            continue
+        if not in_gracenote:
+            tmp.append(c)
+    return ''.join(tmp)
+
+
+def strip_decorations(abc):
+    """Remove decorations
+
+    Removes decorations defined in the v2.1 ABC notation standard.
+
+    :param str abc: ABC notation to process
+    :returns: stripped ABC
+    :rtype: str
+
+    .. seealso:: :const:`DECORATIONS`
+    .. versionadded:: 1.2.0
+
+    """
+    ret = abc
+    for decoration in DECORATIONS:
+        ret = ret.replace(decoration, '')
+
     return ret
 
 
@@ -638,7 +768,8 @@ def expand_abc(abc):
     ret = strip_accidentals(ret)
     ret = strip_triplets(ret)
     ret = strip_chords(ret)
-    ret = strip_ornaments(ret)
+    ret = strip_gracenotes(ret)
+    ret = strip_decorations(ret)
     ret = expand_notes(ret)
     ret = expand_parts(ret)
     ret = strip_whitespace(ret)
