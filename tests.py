@@ -6,7 +6,7 @@ from sjkabc.sjkabc import strip_ornaments, strip_whitespace, strip_accidentals
 from sjkabc.sjkabc import strip_octave, strip_bar_dividers, expand_notes
 from sjkabc.sjkabc import expand_parts, strip_triplets, strip_chords
 from sjkabc.sjkabc import strip_extra_chars, expand_abc, HEADER_KEYS
-from sjkabc.sjkabc import get_id_from_field, get_field_from_id
+from sjkabc.sjkabc import get_id_from_field, get_field_from_id, strip_decorations
 from sjkabc import Tune, Parser
 
 
@@ -218,6 +218,13 @@ class ABCManipulationTestCase(unittest.TestCase):
     def test_get_field_from_id(self):
         field = get_field_from_id('T')
         self.assertEqual(field, 'title')
+
+
+
+class TestDecorations(unittest.TestCase):
+    def test_strip_staccatos(self):
+        abc = '|:a.b.c.:|'
+        self.assertEqual(strip_decorations(abc), '|:abc:|')
 
 
 class TestTune(unittest.TestCase):
