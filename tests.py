@@ -220,7 +220,6 @@ class ABCManipulationTestCase(unittest.TestCase):
         self.assertEqual(field, 'title')
 
 
-
 class TestDecorations(unittest.TestCase):
     def test_strip_staccatos(self):
         abc = '|:a.b.c.:|'
@@ -228,6 +227,10 @@ class TestDecorations(unittest.TestCase):
 
     def test_strip_rolls(self):
         abc = '|:a~b~cd:|'
+        self.assertEqual(strip_decorations(abc), '|:abcd:|')
+
+    def test_strip_shorthand_fermatas(self):
+        abc = '|:aHbcd:|'
         self.assertEqual(strip_decorations(abc), '|:abcd:|')
 
 
