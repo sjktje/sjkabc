@@ -96,6 +96,21 @@ class Tune:
         for line in getattr(self, field):
             yield '{}:{}'.format(get_id_from_field(field), line)
 
+    def format_abc(self):
+        ret = list()
+        for attr in ['index', 'title', 'composer', 'origin', 'rhythm',
+                     'book', 'discography', 'group', 'history', 'notes',
+                     'source', 'transcription', 'parts', 'metre', 'note_length',
+                     'tempo', 'key']:
+            for line in self._get_header_line(attr):
+                ret.append(line)
+
+        for line in self._abc:
+            ret.append(line)
+
+        ret.append('\n')
+
+        return '\n'.join(ret)
 
 
 class Parser:
