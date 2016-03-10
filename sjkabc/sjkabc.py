@@ -90,8 +90,15 @@ class Tune:
     def __str__(self):
         return self.title[0]
 
-    def format_abc(self):
-        pass
+    def _get_attr(self, attr):
+        """Return concatenated object attribute
+
+        :param attr: :class:`Tune` attribute
+        :returns: concatenated attribute
+        :rtype: str
+
+        """
+        return '\n'.join(getattr(self, attr))
 
 
 class Parser:
