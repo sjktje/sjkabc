@@ -45,8 +45,8 @@ class Tune:
     """
     This class represents a parsed tune.
 
-    Its attributes are generated from :py:const:`HEADER_KEYS`, with the addition of
-    :py:meth:`abc` and :py:attr:`expanded_abc`.
+    Its attributes are generated from :py:const:`HEADER_KEYS`, with the
+    addition of :py:meth:`abc` and :py:attr:`expanded_abc`.
 
     Example::
 
