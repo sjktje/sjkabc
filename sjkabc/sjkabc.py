@@ -18,7 +18,6 @@ import os
 
 
 HEADER_KEYS = dict(
-    A='area',
     B='book',
     C='composer',
     D='discography',
