@@ -278,6 +278,13 @@ def get_id_from_field(field):
 
 
 def get_field_from_id(id):
+    """Get long field name from id char.
+
+    :param str id: id char, for example 'T'
+    :returns: long field name, like 'title'
+    :rtype: str
+
+    """
     try:
         return HEADER_KEYS[id]
     except KeyError:
