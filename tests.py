@@ -449,6 +449,42 @@ class TestDecorations(unittest.TestCase):
         self.assertEqual(strip_decorations(abc), '|:abcd:|')
 
 
+class TestParser(unittest.TestCase):
+    def setUp(self):
+        self.abc = """X:1
+T:Test title
+T:Second test title
+C:John Doe
+O:Sweden
+R:reel
+B:The Bible
+D:Best hits
+F:http://bogus.url.com/test.abc
+G:Test
+H:Interesting history
++:about something.
+H:And here is
++:another one.
+N:A note
+S:John Smith
+Z:Doctor Who
+P:AABB
+M:4/4
+L:1/8
+Q:108
+K:Gm
+|:aaa|bbb|ccc:|
+"""
+        self.tunes = [tune for tune in Parser(self.abc)]
+        self.tune = self.tunes[0]
+
+    def test_continued_history_line_is_parsed_properly(self):
+        self.assertEqual(
+            self.tune.history,
+            ['Interesting history about something.', 'And here is another one.']
+        )
+
+
 class TestTune(unittest.TestCase):
     def setUp(self):
         self.t = Tune()
@@ -505,7 +541,6 @@ K:Gm
 
 """
         self.assertEqual(correct, self.t.format_abc())
-
 
 if __name__ == '__main__':
     unittest.main()
