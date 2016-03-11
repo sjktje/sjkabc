@@ -201,7 +201,7 @@ class ABCManipulationTestCase(unittest.TestCase):
         for key in HEADER_KEYS:
             self.assertEqual(getattr(tune, HEADER_KEYS[key]), [])
 
-        for attr in ['abc', 'expanded_abc']:
+        for attr in ['abc', '_expanded_abc']:
             self.assertEqual(getattr(tune, attr), [])
 
     def test_setting_tune_abc_sets_expanded_abc(self):

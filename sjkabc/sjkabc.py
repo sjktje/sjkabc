@@ -196,7 +196,7 @@ class Tune:
             for line in self._get_header_line(attr):
                 ret.append(line)
 
-        for line in self._abc:
+        for line in self.abc:
             ret.append(line)
 
         ret.append('\n')
