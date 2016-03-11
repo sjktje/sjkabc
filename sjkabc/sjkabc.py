@@ -125,7 +125,7 @@ class Tune:
     This class represents a parsed tune.
 
     Its attributes are generated from :py:const:`HEADER_KEYS`, with the
-    addition of :py:meth:`abc` and :py:attr:`expanded_abc`.
+    addition of :py:attr:`abc` and :py:meth:`expanded_abc`.
 
     Example::
 
@@ -140,31 +140,28 @@ class Tune:
 
     def __init__(self):
         """Initialise Tune"""
-        self._abc = []
-        self.expanded_abc = []
+        #: Tune body.
+        self.abc = []
+
+        self._expanded_abc = []
 
         for key in HEADER_KEYS:
             setattr(self, HEADER_KEYS[key], [])
 
     @property
-    def abc(self):
-        """Set and get abc property
+    def expanded_abc(self):
+        """
+        Expanded ABC suitable for searching
 
-        Getter/setter for Tune.abc. When set, the attribute `expanded_abc` will
-        automatically be set to the expanded ABC.
-
-        :param str abc: abc to set
-        :returns: abc
-
-        .. seealso:: :py:func:`expand_abc`
+        :returns: expanded abc
+        :rtype: str
 
         """
-        return self._abc
 
-    @abc.setter
-    def abc(self, abc):
-        self.expanded_abc = expand_abc(abc)
-        return self._abc
+        # If possible we should use a cached value.
+        if not self._expanded_abc:
+            self._expanded_abc = expand_abc(''.join(self.abc))
+        return self._expanded_abc
 
     def __str__(self):
         return self.title[0]
