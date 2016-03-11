@@ -1,5 +1,14 @@
 # Change Log
 
+## Unreleased
+
+## 1.2.2 - 2016-03-11
+
+### Fixed
+
+* Bug introduced by the Tune.abc and Tune.expanded_abc changes in last release.
+  This bug broke Tune.format_abc().
+
 ## 1.2.1 - 2016-03-10
 
 ### Fixed
