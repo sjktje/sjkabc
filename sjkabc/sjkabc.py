@@ -140,7 +140,11 @@ class Tune:
 
     def __init__(self):
         """Initialise Tune"""
+        #: Tune body.
         self._abc = []
+
+        #: List of strings of expanded abc suitable for searching. Automatically set
+        #: by abc() setter.
         self.expanded_abc = []
 
         for key in HEADER_KEYS:
