@@ -1,6 +1,10 @@
 # Change Log
 
-## Unreleased
+## 1.2.1 - 2016-03-10
+
+### Fixed
+
+* Bug which caused Tune.expanded_abc never to be set.
 
 ## 1.2.0 - 2016-03-10
 
