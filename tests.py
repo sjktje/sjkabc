@@ -209,10 +209,6 @@ class ABCManipulationTestCase(unittest.TestCase):
         t.abc = '|:abc bcd|bcd bcd:|'
         self.assertEqual(t.expanded_abc, 'abcbcdbcdbcdabcbcdbcdbcd')
 
-    def test_parser_detects_comment(self):
-        p = Parser('blah')
-        self.assertTrue(p._line_comment('% This is a test'))
-
     def test_tune_object_returns_title_string_representation(self):
         t = Tune()
         t.title.append('Test')
@@ -477,14 +473,38 @@ K:Gm
 """
         self.tunes = [tune for tune in Parser(self.abc)]
         self.tune = self.tunes[0]
+        self.parser = Parser()
 
     def test_is_continued_line(self):
-        p = Parser()
-        self.assertTrue(p._line_is_continued_line('+:something'))
+        self.assertTrue(self.parser._line_is_continued_line('+:something'))
 
     def test_is_not_continued_line(self):
-        p = Parser()
-        self.assertFalse(p._line_is_continued_line('C:composer info'))
+        self.assertFalse(self.parser._line_is_continued_line('C:composer info'))
+
+    def test_line_is_key(self):
+        self.assertTrue(self.parser._line_is_key('K:Gm'))
+
+    def test_line_is_not_key(self):
+        self.assertFalse(self.parser._line_is_key('O:Sweden'))
+
+    def test_line_is_empty(self):
+        self.assertTrue(self.parser._line_empty(''))
+        self.assertTrue(self.parser._line_empty('    '))
+
+    def test_line_is_not_empty(self):
+        self.assertFalse(self.parser._line_empty('D:Greatest hits'))
+
+    def test_line_is_comment(self):
+        self.assertTrue(self.parser._line_comment('% This is a test'))
+
+    def test_line_is_not_a_comment(self):
+        self.assertFalse(self.parser._line_comment('H:This is not a comment.'))
+
+    def test_line_is_index(self):
+        self.assertTrue(self.parser._line_is_index('X:1029'))
+
+    def test_line_is_not_index(self):
+        self.assertFalse(self.parser._line_is_index('Z:John Doe'))
 
     def test_continued_history_line_is_parsed_properly(self):
         self.assertEqual(
