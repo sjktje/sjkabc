@@ -221,14 +221,16 @@ class Parser:
     .. seealso:: :py:class:`Tune`
     """
 
-    def __init__(self, abc):
+    def __init__(self, abc=None):
         """Initialise Parser
 
         :param abc: string containing ABC to parse
 
         """
         self.tunes = []
-        self.parse(abc)
+
+        if abc:
+            self.parse(abc)
         self.index = len(self.tunes)
 
     def __iter__(self):
