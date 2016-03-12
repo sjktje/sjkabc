@@ -66,6 +66,18 @@ def test_strip_bar_dividers():
     assert strip_bar_dividers(abc) == should_be
 
 
+def test_strip_bar_dividers_doesnt_strip_repeats():
+    abc = 'aaa|bbb|ccc|ddd:|'
+    should_be = 'aaabbbcccddd:|'
+    assert strip_bar_dividers(abc) == should_be
+
+
+def test_strip_bar_dividers_removes_end_char():
+    abc = 'aaa|bbb|ccc|ddd|]'
+    should_be = 'aaabbbcccddd'
+    assert strip_bar_dividers(abc) == should_be
+
+
 def test_strip_triplets():
     abc = 'abc (3bbb|bab (3abc|(3GDF bab'
     should_be = 'abc bbb|bab abc|GDF bab'
