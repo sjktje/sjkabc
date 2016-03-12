@@ -2,7 +2,7 @@ language: python
 python:
     - "3.4"
     - "3.5"
-script: "./tests.py"
+script: "python setup.py test"
 install: true
 after_success:
     - coveralls
