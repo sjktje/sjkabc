@@ -228,6 +228,7 @@ class Parser:
 
         """
         self.tunes = []
+        self.last_field = None
 
         if abc:
             self.parse(abc)
@@ -271,6 +272,12 @@ class Parser:
                 (key, val) = line.split(':', 1)
                 if key in HEADER_KEYS:
                     getattr(current_tune, HEADER_KEYS[key]).append(val.strip())
+                    self.last_field = HEADER_KEYS[key]
+
+                # Continuation of info field.
+                if key == '+' and self.last_field:
+                    field = getattr(current_tune, self.last_field)
+                    field[-1] = field[-1] + ' ' + val.strip()
 
                 # Header ends at K:
                 if self._line_is_key(line):
