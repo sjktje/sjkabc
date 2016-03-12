@@ -15,7 +15,7 @@ import pytest
 
 from sjkabc.sjkabc import strip_whitespace, strip_accidentals, strip_octave, \
     strip_bar_dividers, strip_triplets, strip_chords, strip_extra_chars, \
-    strip_gracenotes, strip_decorations
+    strip_gracenotes, strip_decorations, strip_ornaments
 
 
 def test_strip_whitespace():
@@ -28,6 +28,30 @@ def test_strip_accidentals():
     abc = 'AB^cd e=fga|_abcd =abcd'
     should_be = 'ABcd efga|abcd abcd'
     assert strip_accidentals(abc) == should_be
+
+
+def test_strip_ornaments_strips_gracenotes():
+    abc = 'abc{/d}|ab{cd}ef'
+    should_be = 'abc|abef'
+    assert strip_ornaments(abc) == should_be
+
+
+def test_strip_ornaments_strips_trills():
+    abc = 'abc!trill(!d ef!trill)!gh'
+    should_be = 'abcd efgh'
+    assert strip_ornaments(abc) == should_be
+
+
+def test_strip_ornaments_strips_turns():
+    abc = 'abc!turn!d ef!turn!gh'
+    should_be = 'abcd efgh'
+    assert strip_ornaments(abc) == should_be
+
+
+def test_strip_ornaments_strips_fermatas():
+    abc = 'ab!fermata!cd efgh!fermata!'
+    should_be = 'abcd efgh'
+    assert strip_ornaments(abc) == should_be
 
 
 def test_strip_octave():
