@@ -338,6 +338,18 @@ class Parser:
         else:
             return False
 
+    def _line_is_continued_line(self, line):
+        """Check if line is a continuation of the last
+
+        :param line: TODO
+        :returns: TODO
+
+        """
+        if line.startswith('+:'):
+            return True
+        else:
+            return False
+
 
 def get_id_from_field(field):
     """Get id char from field name
