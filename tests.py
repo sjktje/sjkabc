@@ -478,10 +478,19 @@ K:Gm
         self.tunes = [tune for tune in Parser(self.abc)]
         self.tune = self.tunes[0]
 
+    def test_is_continued_line(self):
+        p = Parser()
+        self.assertTrue(p._line_is_continued_line('+:something'))
+
+    def test_is_not_continued_line(self):
+        p = Parser()
+        self.assertFalse(p._line_is_continued_line('C:composer info'))
+
     def test_continued_history_line_is_parsed_properly(self):
         self.assertEqual(
             self.tune.history,
-            ['Interesting history about something.', 'And here is another one.']
+            ['Interesting history about something.',
+             'And here is another one.']
         )
 
 
