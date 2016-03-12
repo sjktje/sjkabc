@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+* Support for continued info field lines (+:).
+
 ## 1.2.2 - 2016-03-11
 
 ### Fixed
