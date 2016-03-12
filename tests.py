@@ -196,14 +196,6 @@ class ABCManipulationTestCase(unittest.TestCase):
         processed = expand_abc(abc)
         self.assertEqual(processed, expected)
 
-    def test_tune_object_initialises_empty_lists(self):
-        tune = Tune()
-        for key in HEADER_KEYS:
-            self.assertEqual(getattr(tune, HEADER_KEYS[key]), [])
-
-        for attr in ['abc', '_expanded_abc']:
-            self.assertEqual(getattr(tune, attr), [])
-
     def test_setting_tune_abc_sets_expanded_abc(self):
         t = Tune()
         t.abc = '|:abc bcd|bcd bcd:|'
@@ -570,6 +562,15 @@ K:Gm
 
 """
         self.assertEqual(correct, self.t.format_abc())
+
+    def test_tune_object_initialises_empty_lists(self):
+        tune = Tune()
+        for key in HEADER_KEYS:
+            self.assertEqual(getattr(tune, HEADER_KEYS[key]), [])
+
+        for attr in ['abc', '_expanded_abc']:
+            self.assertEqual(getattr(tune, attr), [])
+
 
 if __name__ == '__main__':
     unittest.main()
