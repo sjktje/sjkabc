@@ -6,6 +6,10 @@
 
 * Support for continued info field lines (+:).
 
+### Changed
+
+* Use pytest instead of unittest.
+
 ## 1.2.2 - 2016-03-11
 
 ### Fixed
