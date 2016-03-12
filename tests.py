@@ -196,22 +196,10 @@ class ABCManipulationTestCase(unittest.TestCase):
         processed = expand_abc(abc)
         self.assertEqual(processed, expected)
 
-    def test_tune_object_initialises_empty_lists(self):
-        tune = Tune()
-        for key in HEADER_KEYS:
-            self.assertEqual(getattr(tune, HEADER_KEYS[key]), [])
-
-        for attr in ['abc', '_expanded_abc']:
-            self.assertEqual(getattr(tune, attr), [])
-
     def test_setting_tune_abc_sets_expanded_abc(self):
         t = Tune()
         t.abc = '|:abc bcd|bcd bcd:|'
         self.assertEqual(t.expanded_abc, 'abcbcdbcdbcdabcbcdbcdbcd')
-
-    def test_parser_detects_comment(self):
-        p = Parser('blah')
-        self.assertTrue(p._line_comment('% This is a test'))
 
     def test_tune_object_returns_title_string_representation(self):
         t = Tune()
@@ -449,6 +437,75 @@ class TestDecorations(unittest.TestCase):
         self.assertEqual(strip_decorations(abc), '|:abcd:|')
 
 
+class TestParser(unittest.TestCase):
+    def setUp(self):
+        self.abc = """X:1
+T:Test title
+T:Second test title
+C:John Doe
+O:Sweden
+R:reel
+B:The Bible
+D:Best hits
+F:http://bogus.url.com/test.abc
+G:Test
+H:Interesting history
++:about something.
+H:And here is
++:another one.
+N:A note
+S:John Smith
+Z:Doctor Who
+P:AABB
+M:4/4
+L:1/8
+Q:108
+K:Gm
+|:aaa|bbb|ccc:|
+"""
+        self.tunes = [tune for tune in Parser(self.abc)]
+        self.tune = self.tunes[0]
+        self.parser = Parser()
+
+    def test_is_continued_line(self):
+        self.assertTrue(self.parser._line_is_continued_line('+:something'))
+
+    def test_is_not_continued_line(self):
+        self.assertFalse(self.parser._line_is_continued_line('C:composer info'))
+
+    def test_line_is_key(self):
+        self.assertTrue(self.parser._line_is_key('K:Gm'))
+
+    def test_line_is_not_key(self):
+        self.assertFalse(self.parser._line_is_key('O:Sweden'))
+
+    def test_line_is_empty(self):
+        self.assertTrue(self.parser._line_empty(''))
+        self.assertTrue(self.parser._line_empty('    '))
+
+    def test_line_is_not_empty(self):
+        self.assertFalse(self.parser._line_empty('D:Greatest hits'))
+
+    def test_line_is_comment(self):
+        self.assertTrue(self.parser._line_comment('% This is a test'))
+
+    def test_line_is_not_a_comment(self):
+        self.assertFalse(self.parser._line_comment('H:This is not a comment.'))
+
+    def test_line_is_index(self):
+        self.assertTrue(self.parser._line_is_index('X:1029'))
+
+    def test_line_is_not_index(self):
+        self.assertFalse(self.parser._line_is_index('Z:John Doe'))
+
+    def test_continued_history_line_is_parsed_properly(self):
+        self.assertEqual(
+            self.tune.history,
+            ['Interesting history about something.',
+             'And here is another one.']
+        )
+
+
 class TestTune(unittest.TestCase):
     def setUp(self):
         self.t = Tune()
@@ -505,6 +562,14 @@ K:Gm
 
 """
         self.assertEqual(correct, self.t.format_abc())
+
+    def test_tune_object_initialises_empty_lists(self):
+        tune = Tune()
+        for key in HEADER_KEYS:
+            self.assertEqual(getattr(tune, HEADER_KEYS[key]), [])
+
+        for attr in ['abc', '_expanded_abc']:
+            self.assertEqual(getattr(tune, attr), [])
 
 
 if __name__ == '__main__':

@@ -221,14 +221,17 @@ class Parser:
     .. seealso:: :py:class:`Tune`
     """
 
-    def __init__(self, abc):
+    def __init__(self, abc=None):
         """Initialise Parser
 
         :param abc: string containing ABC to parse
 
         """
         self.tunes = []
-        self.parse(abc)
+        self.last_field = None
+
+        if abc:
+            self.parse(abc)
         self.index = len(self.tunes)
 
     def __iter__(self):
@@ -269,6 +272,12 @@ class Parser:
                 (key, val) = line.split(':', 1)
                 if key in HEADER_KEYS:
                     getattr(current_tune, HEADER_KEYS[key]).append(val.strip())
+                    self.last_field = HEADER_KEYS[key]
+
+                # Continuation of info field.
+                if key == '+' and self.last_field:
+                    field = getattr(current_tune, self.last_field)
+                    field[-1] = field[-1] + ' ' + val.strip()
 
                 # Header ends at K:
                 if self._line_is_key(line):
@@ -334,6 +343,18 @@ class Parser:
 
         """
         if line.startswith('X:'):
+            return True
+        else:
+            return False
+
+    def _line_is_continued_line(self, line):
+        """Check if line is a continuation of the last
+
+        :param line: TODO
+        :returns: TODO
+
+        """
+        if line.startswith('+:'):
             return True
         else:
             return False
