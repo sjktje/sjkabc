@@ -9,6 +9,7 @@
 ### Changed
 
 * Use pytest instead of unittest.
+* Tune.format_abc() will no longer include empty info fields.
 
 ## 1.2.2 - 2016-03-11
 
