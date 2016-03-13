@@ -193,11 +193,9 @@ class Tune:
                      'discography', 'file', 'group', 'history', 'notes',
                      'source', 'transcription', 'parts', 'metre',
                      'note_length', 'tempo', 'key']:
-            for line in self._get_header_line(attr):
-                ret.append(line)
+            ret += [line for line in self._get_header_line(attr) if len(line) > 2]
 
-        for line in self.abc:
-            ret.append(line)
+        ret += [line for line in self.abc]
 
         ret.append('\n')
 
