@@ -11,6 +11,7 @@
 """
 
 
+import re
 import pytest
 from pytest import fixture
 
@@ -97,6 +98,15 @@ def test_tune_object_initialises_empty_lists():
 
     for attr in ['abc', '_expanded_abc']:
         assert getattr(t, attr) == []
+
+
+def test_format_abc_does_not_include_empty_info_fields(tune_object):
+    tune_object.history.append('')
+    INFOLINE_REGEXP = re.compile(r'[BCDFGHIKLMNOPQRSTXZ]{1}:(.*)')
+
+    for line in tune_object.format_abc().splitlines():
+        if INFOLINE_REGEXP.match(line):
+            assert len(line) > 2
 
 
 if __name__ == "__main__":
