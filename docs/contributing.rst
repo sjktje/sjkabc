@@ -35,6 +35,7 @@ environment
 
 .. _virtualenvwrapper: https://virtualenvwrapper.readthedocs.org/en/latest/
 
+
 Installing the development version
 ==================================
 
@@ -52,38 +53,20 @@ will install the development version of sjkabc in your virtual environment.
 Contributing changes
 ====================
 
-The discussion and work on sjkabc is done through git_ and GitHub_. The project
-utilise the git-flow_ branching scheme. Using git-flow is not difficult. Assuming
-you have git-flow installed, the typical workflow for hacking on sjkabc is as
-follows.
+The discussion and work on sjkabc is done through git_,  GitHub_ and more
+specifically GitHub's `issue tracker`_. The `GitHub help`_ website provides
+information on how to get up and running easily and quickly with git.
 
-Start a new feature branch for whatever you are hacking on:
-
-.. code-block:: console
-
-    $ git flow feature start your_feature
-
-Hack away and commit changes just as usual. When done, publish your release
-and ask for comments on the `issue tracker`_.
-
-.. code-block:: console
-
-    $ git flow feature publish your_feature
-
-Now open a pull request for your published branch, discuss your changes and
-apply changes. Eventually your change will be merged with the main development
-tree.
+Simply clone the sjkabc repository, create a branch off of the `develop` branch
+and hack away. When done, publish your branch and create a pull request.
 
 .. important::
 
-    Proposed changes should include suitable tests and modifications to the
-    documentation, if appropriate.
-
-Once your changes have been merged you can delete your feature branch and pull
-from the main source tree, or simply merge it in yourself.
+    Proposed changes must include suitable tests and modifications to the
+    documentation, if appropriate. If you need help with this, publish your
+    branch and ask! We'll work on it together.
 
 .. _GitHub: https://github.com/sjktje/sjkabc
-.. _git: https://git-scm.com
-.. _git-flow: https://github.com/nvie/gitflow
+.. _`GitHub help`: https://help.github.com/
 .. _`issue tracker`: https://github.com/sjktje/sjkabc/issues/
-
+.. _git: https://git-scm.com
