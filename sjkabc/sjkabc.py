@@ -138,7 +138,7 @@ class Tune:
     .. seealso:: :py:const:`HEADER_KEYS`, :py:class:`Parser`
     """
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         """Initialise Tune"""
         #: Tune body.
         self.abc = []
@@ -147,6 +147,15 @@ class Tune:
 
         for key in HEADER_KEYS:
             setattr(self, HEADER_KEYS[key], [])
+
+        for keyname, value in kwargs.items():
+            try:
+                get_id_from_field(keyname)
+            except KeyError:
+                if keyname in ['abc']:
+                    setattr(self, keyname, value)
+                else:
+                    raise
 
     @property
     def expanded_abc(self):
