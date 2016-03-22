@@ -14,8 +14,6 @@ import re
 import pytest
 from pytest import fixture
 
-import factory
-
 from sjkabc import Tune
 from sjkabc.sjkabc import HEADER_KEYS
 
@@ -38,7 +36,7 @@ def test_tune_string_representation():
 @fixture
 def tune_object():
     # t = Tune()
-    with factory.debug():
+    # with factory.debug():
         return TuneFactory()
     # t.book.append('The Bible')
     # t.composer.append('John Doe')
@@ -64,9 +62,10 @@ def tune_object():
     # return t
 
 
-def test_get_header_line(tune_object):
-    titles = [title for title in tune_object._get_header_line('title')]
-    assert titles == ['T:Test title', 'T:Second test title']
+def test_get_header_line():
+    t = TuneFactory.create()
+    titles = [title for title in t._get_header_line('title')]
+    assert titles == ['T:Test tune 1']
 
 
 def test_format_abc_returns_header_lines_in_correct_order(tune_object):
