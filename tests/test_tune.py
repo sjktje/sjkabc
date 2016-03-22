@@ -10,13 +10,16 @@
     :license: BSD, see LICENSE for more details.
 """
 
-
 import re
 import pytest
 from pytest import fixture
 
+import factory
+
 from sjkabc import Tune
 from sjkabc.sjkabc import HEADER_KEYS
+
+from tests.factories import TuneFactory
 
 
 def test_expanded_abc_returns_expanded_abc():
@@ -34,29 +37,31 @@ def test_tune_string_representation():
 
 @fixture
 def tune_object():
-    t = Tune()
-    t.book.append('The Bible')
-    t.composer.append('John Doe')
-    t.discography.append('Best hits')
-    t.file.append('http://bogus.url.com/test.abc')
-    t.group.append('Test')
-    t.history.append('Interesting')
-    t.instruction.append('Some instructions')
-    t.key.append('Gm')
-    t.note_length.append('1/8')
-    t.metre.append('4/4')
-    t.notes.append('A note')
-    t.origin.append('Sweden')
-    t.parts.append('AABB')
-    t.tempo.append('108')
-    t.rhythm.append('reel')
-    t.source.append('John Smith')
-    t.title.append('Test title')
-    t.title.append('Second test title')
-    t.index.append('1')
-    t.transcription.append('Doctor Who')
-    t.abc.append('|:aaa|bbb|ccc:|')
-    return t
+    # t = Tune()
+    with factory.debug():
+        return TuneFactory()
+    # t.book.append('The Bible')
+    # t.composer.append('John Doe')
+    # t.discography.append('Best hits')
+    # t.file.append('http://bogus.url.com/test.abc')
+    # t.group.append('Test')
+    # t.history.append('Interesting')
+    # t.instruction.append('Some instructions')
+    # t.key.append('Gm')
+    # t.note_length.append('1/8')
+    # t.metre.append('4/4')
+    # t.notes.append('A note')
+    # t.origin.append('Sweden')
+    # t.parts.append('AABB')
+    # t.tempo.append('108')
+    # t.rhythm.append('reel')
+    # t.source.append('John Smith')
+    # t.title.append('Test title')
+    # t.title.append('Second test title')
+    # t.index.append('1')
+    # t.transcription.append('Doctor Who')
+    # t.abc.append('|:aaa|bbb|ccc:|')
+    # return t
 
 
 def test_get_header_line(tune_object):
@@ -66,16 +71,16 @@ def test_get_header_line(tune_object):
 
 def test_format_abc_returns_header_lines_in_correct_order(tune_object):
     should_be = """X:1
+T:Tune 1
 T:Test title
-T:Second test title
-C:John Doe
+C:Ed Reavy
 O:Sweden
 R:reel
 B:The Bible
 D:Best hits
-F:http://bogus.url.com/test.abc
-G:Test
-H:Interesting
+F:http://tunes.sjk.io/tunes/1/
+G:Group info
+H:Interesting anecdote.
 N:A note
 S:John Smith
 Z:Doctor Who
