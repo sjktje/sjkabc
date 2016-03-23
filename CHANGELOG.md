@@ -5,6 +5,7 @@
 ### Added
 
 * Support for continued info field lines (+:).
+* Factories for testing
 
 ### Changed
 
