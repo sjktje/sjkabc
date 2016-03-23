@@ -12,7 +12,7 @@
     .. py:data:: HEADER_KEYS
 
         Supported ABC notation header keys. This `dict` is used to populate the
-        attributes of :py:class:`Tune`.
+        attributes of :class:`Tune`.
 """
 import os
 
@@ -124,8 +124,8 @@ class Tune:
     """
     This class represents a parsed tune.
 
-    Its attributes are generated from :py:const:`HEADER_KEYS`, with the
-    addition of :py:attr:`abc` and :py:meth:`expanded_abc`.
+    Its attributes are generated from :const:`HEADER_KEYS`, with the
+    addition of :attr:`abc` and :meth:`expanded_abc`.
 
     Example::
 
@@ -135,7 +135,7 @@ class Tune:
         >>> t.expanded_abc
         'abcabcabcabc'
 
-    .. seealso:: :py:const:`HEADER_KEYS`, :py:class:`Parser`
+    .. seealso:: :const:`HEADER_KEYS`, :class:`Parser`
     """
 
     def __init__(self, **kwargs):
@@ -223,7 +223,7 @@ class Parser:
         >>> for tune in Parser(abc):
         ...     print('Parsed ', tune.title)
 
-    .. seealso:: :py:class:`Tune`
+    .. seealso:: :class:`Tune`
     """
 
     def __init__(self, abc=None):
@@ -408,7 +408,7 @@ def parse_file(filename):
     :returns: :class:`Tune` object for every found tune.
     :rtype: :class:`Tune`
 
-    .. seealso:: :py:func:`parse_dir`, :py:class:`Parser`, :py:class:`Tune`
+    .. seealso:: :func:`parse_dir`, :class:`Parser`, :class:`Tune`
     """
     with open(filename, 'r') as f:
         abc = f.read()
@@ -424,7 +424,7 @@ def parse_dir(dir):
     :returns: :class:`Tune` object for every found file
     :rtype: :class:`Tune`
 
-    .. seealso:: :py:func:`parse_file`, :py:class:`Parser`, :py:class:`Tune`
+    .. seealso:: :func:`parse_file`, :class:`Parser`, :class:`Tune`
 
     """
     for dirpath, dirnames, filenames in os.walk(dir):
@@ -780,11 +780,11 @@ def expand_abc(abc):
     :returns: string of expanded abc
     :rtype: str
 
-    .. seealso:: :py:func:`strip_octave`, :py:func:`strip_accidentals`,
-                 :py:func:`strip_triplets`, :py:func:`strip_chords`
-                 :py:func:`strip_ornaments`, :py:func:`expand_notes`,
-                 :py:func:`expand_parts`, :py:func:`strip_whitespace`
-                 :py:func:`strip_bar_dividers`, :py:func:`strip_extra_chars`
+    .. seealso:: :func:`strip_octave`, :func:`strip_accidentals`,
+                 :func:`strip_triplets`, :func:`strip_chords`
+                 :func:`strip_ornaments`, :func:`expand_notes`,
+                 :func:`expand_parts`, :func:`strip_whitespace`
+                 :func:`strip_bar_dividers`, :func:`strip_extra_chars`
 
     """
     ret = strip_octave(abc)
