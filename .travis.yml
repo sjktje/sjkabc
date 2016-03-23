@@ -3,6 +3,7 @@ python:
     - "3.4"
     - "3.5"
 script: "python setup.py test"
-install: true
+install:
+    - pip install -r requirements.txt
 after_success:
     - coveralls
