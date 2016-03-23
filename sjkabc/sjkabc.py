@@ -142,7 +142,6 @@ class Tune:
         """Initialise Tune"""
         #: Tune body.
         self.abc = []
-
         self._expanded_abc = []
 
         for key in HEADER_KEYS:
@@ -152,10 +151,9 @@ class Tune:
             try:
                 get_id_from_field(keyname)
             except KeyError:
-                if keyname in ['abc']:
-                    setattr(self, keyname, value)
-                else:
-                    raise
+                if keyname not in ['abc']:
+                    continue
+            setattr(self, keyname, value)
 
     @property
     def expanded_abc(self):
