@@ -99,6 +99,7 @@ def test_continued_history_line_is_parsed_correctly(p_tune):
 
     assert p_tune.history == should_be
 
+
 @fixture
 def tune1():
     abc = """X:1
