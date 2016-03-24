@@ -15,6 +15,7 @@
 
 
 import pytest
+import re
 
 from sjkabc.sjkabc import expand_notes, expand_parts, expand_abc
 
@@ -134,6 +135,15 @@ def test_expand_abc():
                 'aaeaagegagbgagegdddegggedbgbbaag'
     assert expand_abc(abc) == should_be
 
+
+def test_expanded_string_should_only_contain_lowercase_letters_a_to_g_and_z():
+    TUNE_BODY_REGEXP = re.compile(r'^[a-gz]*$')
+    abc = """
+    A/B/c e<cd>|cBAF gbdA|(ab)cd !trill!baba|z deg z deg:|
+    |:ba{/b}b ba{bbb}ba|gaGC GefD|1"chord"[M:4/4]abab gGGG:|2egag gaGG|]
+    """
+    expanded = expand_abc(abc)
+    assert TUNE_BODY_REGEXP.match(expanded)
 
 if __name__ == "__main__":
     pytest.main()

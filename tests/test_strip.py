@@ -107,6 +107,7 @@ def test_strip_slurs():
     should_be = "ABCD abcd|abcd aBCd|abcd abcd:|"
     assert strip_slurs(abc) == should_be
 
+
 class TestDecorations():
     def test_strip_staccatos(self):
         abc = '|:a.b.c.:|'
