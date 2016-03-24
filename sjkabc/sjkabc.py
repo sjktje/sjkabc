@@ -748,17 +748,10 @@ def expand_abc(abc):
                  :func:`strip_slurs`
 
     """
-    ret = strip_octave(abc)
-    ret = strip_accidentals(ret)
-    ret = strip_triplets(ret)
-    ret = strip_chords(ret)
-    ret = strip_gracenotes(ret)
-    ret = strip_decorations(ret)
-    ret = strip_slurs(ret)
-    ret = expand_notes(ret)
-    ret = expand_parts(ret)
-    ret = strip_whitespace(ret)
-    ret = strip_bar_dividers(ret)
-    ret = strip_extra_chars(ret)
-    ret = ret.lower()
-    return ret
+    for f in [strip_octave, strip_accidentals, strip_triplets,
+              strip_chords, strip_gracenotes, strip_decorations,
+              strip_slurs, expand_notes, expand_parts,
+              strip_whitespace, strip_bar_dividers, strip_extra_chars]:
+        abc = f(abc)
+
+    return abc.lower()
