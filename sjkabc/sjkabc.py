@@ -739,7 +739,8 @@ def expand_abc(abc):
                  :func:`strip_triplets`, :func:`strip_chords`
                  :func:`strip_ornaments`, :func:`expand_notes`,
                  :func:`expand_parts`, :func:`strip_whitespace`
-                 :func:`strip_bar_dividers`, :func:`strip_extra_chars`
+                 :func:`strip_bar_dividers`, :func:`strip_extra_chars`,
+                 :func:`strip_slurs`
 
     """
     ret = strip_octave(abc)
@@ -748,6 +749,7 @@ def expand_abc(abc):
     ret = strip_chords(ret)
     ret = strip_gracenotes(ret)
     ret = strip_decorations(ret)
+    ret = strip_slurs(ret)
     ret = expand_notes(ret)
     ret = expand_parts(ret)
     ret = strip_whitespace(ret)
