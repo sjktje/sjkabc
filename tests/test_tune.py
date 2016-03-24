@@ -12,7 +12,7 @@
 
 import re
 import pytest
-from pytest import fixture
+from pytest import fixture, raises
 from sjkabc import Tune
 from sjkabc.sjkabc import HEADER_KEYS
 
@@ -51,6 +51,11 @@ def test_format_abc_does_not_include_empty_info_fields(tune_object):
         if INFOLINE_REGEXP.match(line):
             assert len(line) > 2
 
+
+def test_cannot_set_incorrect_attribute_through_init():
+    t = Tune(something_incorrect='testing')
+    with raises(AttributeError):
+        t.something_incorrect
 
 if __name__ == "__main__":
     pytest.main()
