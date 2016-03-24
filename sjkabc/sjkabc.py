@@ -573,6 +573,11 @@ def strip_slurs(abc):
     """
     Remove slurs from string.
 
+    Example::
+
+        >>> strip_slurs('|:ab(cd) (a(bc)d):|')
+        |:abcd abcd:|
+
     .. warning::
         Don't use this before :func:`strip_decorations` as it may change
         certain decorations so that they wont be recognized. One example would
