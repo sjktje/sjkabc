@@ -148,6 +148,11 @@ def test_continued_history_line_is_parsed_correctly(p_tune):
     assert p_tune.history == should_be
 
 
+def test_parsed_info_line_should_not_start_with_space(tune1):
+    tunes = [t for t in Parser(tune1)]
+    assert not tunes[0].history[0].startswith(' ')
+
+
 def test_parse_file(tmpdir, two_abc_tunes):
     f = tmpdir.join('tunes.abc')
     f.write(two_abc_tunes)
