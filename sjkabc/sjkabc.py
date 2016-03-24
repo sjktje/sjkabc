@@ -355,8 +355,8 @@ class Parser:
     def _line_is_continued_line(self, line):
         """Check if line is a continuation of the last
 
-        :param line: TODO
-        :returns: TODO
+        :param str line: Line to check
+        :returns: true if the line is a continuation line
 
         """
         if line.startswith('+:'):
