@@ -15,7 +15,7 @@ import pytest
 
 from sjkabc.sjkabc import strip_whitespace, strip_accidentals, strip_octave, \
     strip_bar_dividers, strip_triplets, strip_chords, strip_extra_chars, \
-    strip_gracenotes, strip_decorations, strip_ornaments
+    strip_gracenotes, strip_decorations, strip_ornaments, strip_slurs
 
 
 def test_strip_whitespace():
@@ -101,6 +101,11 @@ def test_strip_gracenotes():
     should_be = "ABcd Bcde|BBB e eAce|BAGA BAGA"
     assert strip_gracenotes(abc) == should_be
 
+
+def test_strip_slurs():
+    abc = "ABCD (abcd)|ab(cd) (a)BCd|(abcd abcd):|"
+    should_be = "ABCD abcd|abcd aBCd|abcd abcd:|"
+    assert strip_slurs(abc) == should_be
 
 class TestDecorations():
     def test_strip_staccatos(self):
