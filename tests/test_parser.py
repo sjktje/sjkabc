@@ -4,7 +4,7 @@
     test_parser
     ~~~~~~~~~~~
 
-    This module contains tests for the Parser class.
+    This module contains tests for the Parser class and the parse_ functions.
 
     :copyright: (c) 2016 by Svante Kvarnström
     :license: BSD, see LICENSE for more details.
@@ -146,8 +146,6 @@ def test_continued_history_line_is_parsed_correctly(p_tune):
                  'And here is another one.']
 
     assert p_tune.history == should_be
-
-
 
 
 def test_parse_file(tmpdir, two_abc_tunes):
