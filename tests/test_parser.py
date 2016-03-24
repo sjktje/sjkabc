@@ -14,7 +14,7 @@
 import pytest
 from pytest import fixture
 
-from sjkabc import Parser
+from sjkabc import Parser, parse_dir, parse_file
 
 @fixture
 def p_tune():
@@ -98,6 +98,78 @@ def test_continued_history_line_is_parsed_correctly(p_tune):
                  'And here is another one.']
 
     assert p_tune.history == should_be
+
+@fixture
+def tune1():
+    abc = """X:1
+T: In Memory Of Coleman
+C: Ed Reavy
+R: Reel
+O: Ireland
+M: 4/4
+H: So here's the story. And it
++: continues on this line.
+H: Another anecdote without continuation.
+L: 1/8
+Z: Svante Kvarnström
+P: AB
+K: Gm
+[P: A]DGBd cBGF|DF~F2 GFDF|GABc dgga|b/a/gaf dgga|
+(ab)ag gfdc|B/c/dBG FDCF|DGBd c2Bc|1dgdc BGGF:|2dgdc BGGA||
+[P: B]|:(AB)Bd g3f|=ec~c2 AF~F2|G z g=e fdcA|FAcA BGGA|
+(AB)fB DBfB|DBfB AF~F2|G3B dBcA|1B/c/dcA G3A:|2B/c/dcA G3F|]
+"""
+    return abc
+
+
+@fixture
+def tune2():
+    abc = """X:37
+T:Apples In Winter
+T:Fictional second name
+T:Fictional third name
+C:Trad.
+R:Jig
+M:6/8
+L:1/8
+Z:Svante Kvarnström
+K:Em
+BEE BEE|Bdf edB|BAF FEF|DFA BAF|
+BEE BEE|Bdf edB|BAB dAF|1FED EGA:|2FED EAc||
+|:e2f gfe|eae edB|BAF FEF|DFA BAF|
+e2f gfe|eae edB|BAB dAF|1FED EAc:|2FED E3|]
+"""
+    return abc
+
+
+@fixture
+def two_abc_tunes(tune1, tune2):
+    return tune1 + tune2
+
+
+def test_parse_file(tmpdir, two_abc_tunes):
+    f = tmpdir.join('tunes.abc')
+    f.write(two_abc_tunes)
+    tunes = [tune for tune in parse_file(str(f))]
+    indexes = [i.index for i in tunes]
+
+    assert len(tunes) == 2
+
+    assert ['1'] in indexes
+    assert ['37'] in indexes
+
+
+def test_parse_dir(tmpdir, tune1, tune2):
+    d = tmpdir.mkdir('tunes')
+
+    d.join('tune1.abc').write(tune1)
+    d.join('tune2.abc').write(tune2)
+
+    tunes = [t for t in parse_dir(str(d))]
+    indexes = [i.index for i in tunes]
+
+    assert ['1'] in indexes
+    assert ['37'] in indexes
 
 
 if __name__ == "__main__":
