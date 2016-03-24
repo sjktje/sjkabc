@@ -16,7 +16,6 @@ from pytest import fixture
 
 from sjkabc import Parser
 
-
 @fixture
 def p_tune():
     abc = """X:1
@@ -53,13 +52,11 @@ def p():
     return Parser()
 
 
-def test_line_is_continued_line():
-    p = Parser()
+def test_line_is_continued_line(p):
     assert p._line_is_continued_line('+:something')
 
 
-def test_line_is_not_continued_line():
-    p = Parser()
+def test_line_is_not_continued_line(p):
     assert not p._line_is_continued_line('C:composer info')
 
 
