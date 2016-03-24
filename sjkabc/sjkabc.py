@@ -569,6 +569,24 @@ def strip_triplets(abc):
     return ''.join(ret)
 
 
+def strip_slurs(abc):
+    """
+    Remove slurs from string.
+
+    .. warning::
+        Don't use this before :func:`strip_decorations` as it may change
+        certain decorations so that they wont be recognized. One example would
+        be `!trill(!`.
+
+    :param str abc: abc to manipulate
+    :returns: abc stripped from slurs
+    :rtype: str
+    """
+    for a in ['(', ')']:
+        abc = abc.replace(a, '')
+    return abc
+
+
 def expand_notes(abc):
     """
     Expand notes, so that E2 becomes EE et.c.
@@ -721,7 +739,8 @@ def expand_abc(abc):
                  :func:`strip_triplets`, :func:`strip_chords`
                  :func:`strip_ornaments`, :func:`expand_notes`,
                  :func:`expand_parts`, :func:`strip_whitespace`
-                 :func:`strip_bar_dividers`, :func:`strip_extra_chars`
+                 :func:`strip_bar_dividers`, :func:`strip_extra_chars`,
+                 :func:`strip_slurs`
 
     """
     ret = strip_octave(abc)
@@ -730,6 +749,7 @@ def expand_abc(abc):
     ret = strip_chords(ret)
     ret = strip_gracenotes(ret)
     ret = strip_decorations(ret)
+    ret = strip_slurs(ret)
     ret = expand_notes(ret)
     ret = expand_parts(ret)
     ret = strip_whitespace(ret)

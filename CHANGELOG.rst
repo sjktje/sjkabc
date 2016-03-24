@@ -8,6 +8,7 @@ Unreleased
 * Added factories for testing
 * Unittest replaced with pytest
 * Tune.format_abc() will no longer include empty info fields
+* Add strip_slurs() which removes slurs (parentheses) from string. This function is called by expand_abc.
 
 1.2.2 (2016-03-11)
 ------------------
