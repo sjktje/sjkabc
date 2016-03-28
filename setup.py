@@ -8,6 +8,8 @@ setup(
     name='sjkabc',
     version=sjkabc.__version__,
     packages=['sjkabc'],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
     author=u'Svante Kvarnström',
     author_email='sjk@sjk.io',
     description='ABC music notation parser',

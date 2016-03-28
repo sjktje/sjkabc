@@ -12,7 +12,7 @@
     .. py:data:: HEADER_KEYS
 
         Supported ABC notation header keys. This `dict` is used to populate the
-        attributes of :py:class:`Tune`.
+        attributes of :class:`Tune`.
 """
 import os
 
@@ -41,81 +41,18 @@ HEADER_KEYS = dict(
 
 #: List of decoration symbols according to the ABC notation standard v2.1.
 DECORATIONS = [
-    '!trill!',
-    '!trill(!',
-    '!trill)!',
-    '!lowermordent!',
-    '!uppermordent!',
-    '!mordent!',
-    '!pralltriller!',
-    '!roll!',
-    '!turn!',
-    '!turnx!',
-    '!invertedturn!',
-    '!invertedturnx!',
-    '!arpeggio!',
-    '!>!',
-    '!accent!',
-    '!emphasis!',
-    '!fermata!',
-    '!invertedfermata!',
-    '!tenuto!',
-    '!0!',
-    '!1!',
-    '!2!',
-    '!3!',
-    '!4!',
-    '!5!',
-    '!+!',
-    '!plus!',
-    '!snap!',
-    '!slide!',
-    '!wedge!',
-    '!upbow!',
-    '!downbow!',
-    '!open!',
-    '!thumb!',
-    '!breath!',
-    '!pppp!',
-    '!ppp!',
-    '!pp!',
-    '!p!',
-    '!mp!',
-    '!mf!',
-    '!f!',
-    '!ff!',
-    '!fff!',
-    '!ffff!',
-    '!sfz!',
-    '!crescendo(!',
-    '!<(!',
-    '!crescendo)!',
-    '!<)!',
-    '!diminuendo(!',
-    '!>(!',
-    '!diminuendo)!',
-    '!>)!',
-    '!segno!',
-    '!coda!',
-    '!D.S.!',
-    '!D.C.!',
-    '!dacoda!',
-    '!dacapo!',
-    '!fine!',
-    '!shortphrase!',
-    '!mediumphrase!',
-    '!longphrase!',
-    '.',
-    '~',
-    'H',
-    'L',
-    'M',
-    'O',
-    'P',
-    'S',
-    'T',
-    'u',
-    'v'
+    '!trill!', '!trill(!', '!trill)!', '!lowermordent!', '!uppermordent!',
+    '!mordent!', '!pralltriller!', '!roll!', '!turn!', '!turnx!',
+    '!invertedturn!', '!invertedturnx!', '!arpeggio!', '!>!', '!accent!',
+    '!emphasis!', '!fermata!', '!invertedfermata!', '!tenuto!', '!0!', '!1!',
+    '!2!', '!3!', '!4!', '!5!', '!+!', '!plus!', '!snap!', '!slide!',
+    '!wedge!', '!upbow!', '!downbow!', '!open!', '!thumb!', '!breath!',
+    '!pppp!', '!ppp!', '!pp!', '!p!', '!mp!', '!mf!', '!f!', '!ff!', '!fff!',
+    '!ffff!', '!sfz!', '!crescendo(!', '!<(!', '!crescendo)!', '!<)!',
+    '!diminuendo(!', '!>(!', '!diminuendo)!', '!>)!', '!segno!', '!coda!',
+    '!D.S.!', '!D.C.!', '!dacoda!', '!dacapo!', '!fine!', '!shortphrase!',
+    '!mediumphrase!', '!longphrase!', '.', '~', 'H', 'L', 'M', 'O', 'P', 'S',
+    'T', 'u', 'v'
 ]
 
 
@@ -124,8 +61,8 @@ class Tune:
     """
     This class represents a parsed tune.
 
-    Its attributes are generated from :py:const:`HEADER_KEYS`, with the
-    addition of :py:attr:`abc` and :py:meth:`expanded_abc`.
+    Its attributes are generated from :const:`HEADER_KEYS`, with the
+    addition of :attr:`abc` and :meth:`expanded_abc`.
 
     Example::
 
@@ -135,18 +72,25 @@ class Tune:
         >>> t.expanded_abc
         'abcabcabcabc'
 
-    .. seealso:: :py:const:`HEADER_KEYS`, :py:class:`Parser`
+    .. seealso:: :const:`HEADER_KEYS`, :class:`Parser`
     """
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         """Initialise Tune"""
         #: Tune body.
         self.abc = []
-
         self._expanded_abc = []
 
         for key in HEADER_KEYS:
             setattr(self, HEADER_KEYS[key], [])
+
+        for keyname, value in kwargs.items():
+            try:
+                get_id_from_field(keyname)
+            except KeyError:
+                if keyname not in ['abc']:
+                    continue
+            setattr(self, keyname, value)
 
     @property
     def expanded_abc(self):
@@ -193,11 +137,9 @@ class Tune:
                      'discography', 'file', 'group', 'history', 'notes',
                      'source', 'transcription', 'parts', 'metre',
                      'note_length', 'tempo', 'key']:
-            for line in self._get_header_line(attr):
-                ret.append(line)
+            ret += [line for line in self._get_header_line(attr) if len(line) > 2]
 
-        for line in self.abc:
-            ret.append(line)
+        ret += [line for line in self.abc]
 
         ret.append('\n')
 
@@ -218,17 +160,20 @@ class Parser:
         >>> for tune in Parser(abc):
         ...     print('Parsed ', tune.title)
 
-    .. seealso:: :py:class:`Tune`
+    .. seealso:: :class:`Tune`
     """
 
-    def __init__(self, abc):
+    def __init__(self, abc=None):
         """Initialise Parser
 
         :param abc: string containing ABC to parse
 
         """
         self.tunes = []
-        self.parse(abc)
+        self.last_field = None
+
+        if abc:
+            self.parse(abc)
         self.index = len(self.tunes)
 
     def __iter__(self):
@@ -269,6 +214,12 @@ class Parser:
                 (key, val) = line.split(':', 1)
                 if key in HEADER_KEYS:
                     getattr(current_tune, HEADER_KEYS[key]).append(val.strip())
+                    self.last_field = HEADER_KEYS[key]
+
+                # Continuation of info field.
+                if key == '+' and self.last_field:
+                    field = getattr(current_tune, self.last_field)
+                    field[-1] = field[-1] + ' ' + val.strip()
 
                 # Header ends at K:
                 if self._line_is_key(line):
@@ -338,6 +289,18 @@ class Parser:
         else:
             return False
 
+    def _line_is_continued_line(self, line):
+        """Check if line is a continuation of the last
+
+        :param str line: Line to check
+        :returns: true if the line is a continuation line
+
+        """
+        if line.startswith('+:'):
+            return True
+        else:
+            return False
+
 
 def get_id_from_field(field):
     """Get id char from field name
@@ -382,7 +345,7 @@ def parse_file(filename):
     :returns: :class:`Tune` object for every found tune.
     :rtype: :class:`Tune`
 
-    .. seealso:: :py:func:`parse_dir`, :py:class:`Parser`, :py:class:`Tune`
+    .. seealso:: :func:`parse_dir`, :class:`Parser`, :class:`Tune`
     """
     with open(filename, 'r') as f:
         abc = f.read()
@@ -398,7 +361,7 @@ def parse_dir(dir):
     :returns: :class:`Tune` object for every found file
     :rtype: :class:`Tune`
 
-    .. seealso:: :py:func:`parse_file`, :py:class:`Parser`, :py:class:`Tune`
+    .. seealso:: :func:`parse_file`, :class:`Parser`, :class:`Tune`
 
     """
     for dirpath, dirnames, filenames in os.walk(dir):
@@ -606,6 +569,29 @@ def strip_triplets(abc):
     return ''.join(ret)
 
 
+def strip_slurs(abc):
+    """
+    Remove slurs from string.
+
+    Example::
+
+        >>> strip_slurs('|:ab(cd) (a(bc)d):|')
+        |:abcd abcd:|
+
+    .. warning::
+        Don't use this before :func:`strip_decorations` as it may change
+        certain decorations so that they wont be recognized. One example would
+        be `!trill(!`.
+
+    :param str abc: abc to manipulate
+    :returns: abc stripped from slurs
+    :rtype: str
+    """
+    for a in ['(', ')']:
+        abc = abc.replace(a, '')
+    return abc
+
+
 def expand_notes(abc):
     """
     Expand notes, so that E2 becomes EE et.c.
@@ -754,23 +740,18 @@ def expand_abc(abc):
     :returns: string of expanded abc
     :rtype: str
 
-    .. seealso:: :py:func:`strip_octave`, :py:func:`strip_accidentals`,
-                 :py:func:`strip_triplets`, :py:func:`strip_chords`
-                 :py:func:`strip_ornaments`, :py:func:`expand_notes`,
-                 :py:func:`expand_parts`, :py:func:`strip_whitespace`
-                 :py:func:`strip_bar_dividers`, :py:func:`strip_extra_chars`
+    .. seealso:: :func:`strip_octave`, :func:`strip_accidentals`,
+                 :func:`strip_triplets`, :func:`strip_chords`
+                 :func:`strip_ornaments`, :func:`expand_notes`,
+                 :func:`expand_parts`, :func:`strip_whitespace`
+                 :func:`strip_bar_dividers`, :func:`strip_extra_chars`,
+                 :func:`strip_slurs`
 
     """
-    ret = strip_octave(abc)
-    ret = strip_accidentals(ret)
-    ret = strip_triplets(ret)
-    ret = strip_chords(ret)
-    ret = strip_gracenotes(ret)
-    ret = strip_decorations(ret)
-    ret = expand_notes(ret)
-    ret = expand_parts(ret)
-    ret = strip_whitespace(ret)
-    ret = strip_bar_dividers(ret)
-    ret = strip_extra_chars(ret)
-    ret = ret.lower()
-    return ret
+    for f in [strip_octave, strip_accidentals, strip_triplets,
+              strip_chords, strip_gracenotes, strip_decorations,
+              strip_slurs, expand_notes, expand_parts,
+              strip_whitespace, strip_bar_dividers, strip_extra_chars]:
+        abc = f(abc)
+
+    return abc.lower()

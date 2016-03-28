@@ -27,3 +27,4 @@ Contents:
    sjkabc
    limitations
    contributing
+   changelog
