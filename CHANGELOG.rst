@@ -4,6 +4,9 @@ Change Log
 Unreleased
 ----------
 
+1.3.0 (2016-03-27)
+------------------
+
 * Added support for continued info field lines (+:)
 * Added factories for testing
 * Unittest replaced with pytest
