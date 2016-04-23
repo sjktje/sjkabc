@@ -4,6 +4,8 @@ Change Log
 Unreleased
 ----------
 
+* format_abc() will not include empty header lines.
+
 1.3.0 (2016-03-27)
 ------------------
 
