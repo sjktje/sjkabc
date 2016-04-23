@@ -52,6 +52,12 @@ def test_format_abc_does_not_include_empty_info_fields(tune_object):
             assert len(line) > 2
 
 
+def test_format_abc_does_not_include_empty_list_fields():
+    t = TuneFactory.create(key=[])
+    for line in t.format_abc().splitlines():
+        assert line != 'K:[]'
+
+
 def test_cannot_set_incorrect_attribute_through_init():
     t = Tune(something_incorrect='testing')
     with raises(AttributeError):
