@@ -114,12 +114,15 @@ class Tune:
         """Retrieve every header/field line
 
         This function will yield all of the specified `field` lines formatted
-        as id:line, for example 'T:Fictional title.'
+        as id:line, for example 'T:Fictional title.' Skips empty lines.
 
         :param str field: :class:`Tune` attribute containing wanted field
 
         """
         for line in getattr(self, field):
+            if not line:
+                continue
+
             yield '{}:{}'.format(get_id_from_field(field), line)
 
     def format_abc(self):
