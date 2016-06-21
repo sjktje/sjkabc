@@ -312,6 +312,7 @@ def get_id_from_field(field):
     :param str field: 'long' name of field, for example 'title'
     :returns: id character, for example 'T'
     :rtype: str
+    :raises KeyError: if key does not exist.
 
     """
     for key in HEADER_KEYS:
@@ -327,6 +328,7 @@ def get_field_from_id(id):
     :param str id: id char, for example 'T'
     :returns: long field name, like 'title'
     :rtype: str
+    :raises KeyError: if key does not exist.
 
     """
     try:
