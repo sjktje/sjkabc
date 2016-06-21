@@ -1,18 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-    sjkabc.sjkabc
-    ~~~~~~~~~~~~~
+sjkabc.sjkabc
 
-    This module provides functionality for parsing ABC music notation.
+This module provides functionality for parsing ABC music notation.
 
-    :copyright: (c) 2016 by Svante Kvarnström
-    :license: BSD, see LICENSE for more details.
+:copyright: (c) 2016 by Svante Kvarnström
+:license: BSD, see LICENSE for more details.
 
-    .. py:data:: HEADER_KEYS
+.. py:data:: HEADER_KEYS
 
-        Supported ABC notation header keys. This `dict` is used to populate the
-        attributes of :class:`Tune`.
+    Supported ABC notation header keys. This `dict` is used to populate the
+    attributes of :class:`Tune`.
 """
 import os
 import textwrap
@@ -141,7 +140,7 @@ class Tune:
                      'discography', 'file', 'group', 'history', 'notes',
                      'source', 'transcription', 'parts', 'metre',
                      'note_length', 'tempo', 'key']:
-            ret += [line for line in self._get_header_line(attr) if len(line) > 2]
+            ret += [l for l in self._get_header_line(attr) if len(l) > 2]
 
         ret += [line for line in self.abc]
 
@@ -382,9 +381,9 @@ def strip_ornaments(abc):
     Example::
 
         >>> from sjkabc import strip_ornaments
-        >>> stripped = strip_ornaments('abc bcd|~c3 def|{/def}efg !trill(!abc|')
+        >>> stripped = strip_ornaments('abc bcd|~c3 def|{/def}efg !trill(!ab|')
         >>> stripped
-        'abc bcd|c3 def|efg abc|'
+        'abc bcd|c3 def|efg ab|'
 
     :param str abc: abc to filter
     :returns: filtered abc
@@ -520,9 +519,9 @@ def strip_bar_dividers(abc):
     Example::
 
         >>> from sjkabc import strip_bar_dividers
-        >>> stripped = strip_bar_dividers('abcd bcde|bcde abcd|defg abcd|bebe baba')
+        >>> stripped = strip_bar_dividers('abcd bcde|bcde abcd|defg abcd|bebe')
         >>> stripped
-        'abcd bcdebcde abcddefg abcdbebe baba'
+        'abcd bcdebcde abcddefg abcdbebe'
 
     :param str abc: abc to filter
     :returns: abc without bar dividers
