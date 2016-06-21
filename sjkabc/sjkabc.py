@@ -15,6 +15,7 @@
         attributes of :class:`Tune`.
 """
 import os
+import textwrap
 
 
 HEADER_KEYS = dict(
@@ -123,7 +124,7 @@ class Tune:
             if not line:
                 continue
 
-            yield '{}:{}'.format(get_id_from_field(field), line)
+            yield wrap_line(line, get_id_from_field(field))
 
     def format_abc(self):
         """Format ABC tune
@@ -758,3 +759,23 @@ def expand_abc(abc):
         abc = f(abc)
 
     return abc.lower()
+
+
+def wrap_line(string, id, max_length=78, prefix='+'):
+    """
+    Wrap header line.
+
+    :param str string: string to wrap
+    :param str id: character id of header line
+    :param int max_length: maximum line length
+    :param str prefix: Line prefix for wrapped lines (first line exempted)
+    :returns: wrapped line
+    :rtype: str
+
+    .. seealso:: :func:`get_id_from_field`
+    """
+    w = textwrap.TextWrapper()
+    w.initial_indent = '{}:'.format(id)
+    w.subsequent_indent = '{}:'.format(prefix)
+    w.width = max_length
+    return '\n'.join(w.wrap(string))
