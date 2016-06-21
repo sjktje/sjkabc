@@ -14,7 +14,7 @@ import re
 import pytest
 from pytest import fixture, raises
 from sjkabc import Tune
-from sjkabc.sjkabc import HEADER_KEYS
+from sjkabc.sjkabc import HEADER_KEYS, wrap_line
 
 from tests.factories import TuneFactory
 
@@ -33,6 +33,35 @@ def test_tune_string_representation(tune_object):
 def test_get_header_line(tune_object):
     titles = [title for title in tune_object._get_header_line('title')]
     assert titles == ['T:Test tune']
+
+
+def test_get_header_line_wraps(tune_object):
+    tune_object.notes = [(
+        'This is a very long note line, well over eighty characters. It '
+        'should be wrapped to two lines. If it does not wrap, we have '
+        'failed. And that would be embarrassing. Would it not?'
+    )]
+
+    notes = [note for note in tune_object._get_header_line('notes')]
+    expected = [
+'''N:This is a very long note line, well over eighty characters. It should be
++:wrapped to two lines. If it does not wrap, we have failed. And that would be
++:embarrassing. Would it not?'''
+    ]
+
+    assert notes == expected
+
+
+def test_wrap_line_wraps_line():
+    line = 'This is a very long line that should be wrapped.'
+    expected = 'I:This is a very\n+:long line that\n+:should be wrapped.'
+    assert wrap_line(line, 'I', max_length=20) == expected
+
+
+def test_wrap_line_prefix():
+    line = 'This is a very long line that should be wrapped.'
+    expected = 'I:This is a very\n$:long line that\n$:should be wrapped.'
+    assert wrap_line(line, 'I', max_length=20, prefix='$')
 
 
 def test_tune_initialises_empty_lists():
