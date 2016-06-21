@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-unreleased
-----------
+1.4.0 (2016-06-21)
+------------------
 
 * format_abc() wraps header lines prefixing them with '+:'.
 
