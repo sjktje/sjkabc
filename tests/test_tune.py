@@ -16,7 +16,7 @@ from pytest import fixture, raises
 from sjkabc import Tune
 from sjkabc.sjkabc import HEADER_KEYS, wrap_line
 
-from tests.factories import TuneFactory
+from factories import TuneFactory
 
 @fixture
 def tune_object():
