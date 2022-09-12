@@ -11,7 +11,7 @@ mccabe==0.3
 pep8==1.5.7
 py==1.4.31
 pyflakes==0.8.1
-pytest==2.9.0
+pytest==7.1.3
 python-dateutil==2.5.1
 pytz==2015.7
 six==1.10.0
