@@ -722,7 +722,7 @@ def strip_chords(abc):
 
 
 def strip_extra_chars(abc):
-    """Strip misc extra chars (/\<>)
+    """Strip misc extra chars
 
     :param str abc: abc to filter
     :returns: filtered abc
