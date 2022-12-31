@@ -776,7 +776,7 @@ def wrap_line(string, id, max_length=78, prefix='+'):
     .. seealso:: :func:`get_id_from_field`
     """
     w = textwrap.TextWrapper()
-    w.initial_indent = '{}:'.format(id)
-    w.subsequent_indent = '{}:'.format(prefix)
+    w.initial_indent = f'{id}:'
+    w.subsequent_ident = f'{prefix}:'
     w.width = max_length
     return '\n'.join(w.wrap(string))
