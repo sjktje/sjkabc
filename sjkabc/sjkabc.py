@@ -777,6 +777,6 @@ def wrap_line(string, id, max_length=78, prefix='+'):
     """
     w = textwrap.TextWrapper()
     w.initial_indent = f'{id}:'
-    w.subsequent_ident = f'{prefix}:'
+    w.subsequent_indent = f'{prefix}:'
     w.width = max_length
     return '\n'.join(w.wrap(string))
