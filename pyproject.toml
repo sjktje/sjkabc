@@ -1,20 +1,29 @@
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "sjkabc"
-dynamic = ['version']
+dynamic = ["version"]
 license = {text = "BSD"}
+authors = [
+  { name="Svante Kvarnström", email="sjk@sjk.io" },
+]
 classifiers=[
-    'Development Status :: 3 - Alpha',
+    'Development Status :: 4 - Beta',
     'License :: OSI Approved :: BSD License',
     'Programming Language :: Python :: 3'
 ]
+README = "README.rst"
 dependencies = [ ]
+description = "ABC music notation parsing library."
 
-[tool.setuptools.dynamic]
-version = {attr = "sjkabc.__version__"}
+[project.urls]
+Source = "https://github.com/sjktje/sjkabc"
+Documentation = "https://readthedocs.org/projects/sjkabc/"
+
+[tool.hatch.version]
+path = "sjkabc/__init__.py"
 
 [tool.pytest.ini_options]
 testpaths = [
